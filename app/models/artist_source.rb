@@ -1,0 +1,2 @@
+class ArtistSource < ApplicationRecord
+end

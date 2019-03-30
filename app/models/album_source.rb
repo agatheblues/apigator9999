@@ -1,0 +1,2 @@
+class AlbumSource < ApplicationRecord
+end
