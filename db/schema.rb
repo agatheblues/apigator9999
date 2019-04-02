@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_30_164748) do
+ActiveRecord::Schema.define(version: 2019_04_02_204102) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -28,7 +28,6 @@ ActiveRecord::Schema.define(version: 2019_03_30_164748) do
     t.string "added_at"
     t.string "name", null: false
     t.string "release_date"
-    t.string "release_type"
     t.integer "total_tracks"
     t.string "img_url"
     t.integer "height"
@@ -40,6 +39,11 @@ ActiveRecord::Schema.define(version: 2019_03_30_164748) do
   create_table "albums_artists", id: false, force: :cascade do |t|
     t.bigint "artist_id", null: false
     t.bigint "album_id", null: false
+  end
+
+  create_table "albums_genres", id: false, force: :cascade do |t|
+    t.bigint "album_id", null: false
+    t.bigint "genre_id", null: false
   end
 
   create_table "artist_sources", force: :cascade do |t|
@@ -61,13 +65,10 @@ ActiveRecord::Schema.define(version: 2019_03_30_164748) do
   create_table "genres", force: :cascade do |t|
     t.string "type"
     t.string "name"
-    t.bigint "album_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["album_id"], name: "index_genres_on_album_id"
   end
 
   add_foreign_key "album_sources", "albums"
   add_foreign_key "artist_sources", "artists"
-  add_foreign_key "genres", "albums"
 end
