@@ -1,2 +1,0 @@
-class AlbumsGenre < ApplicationRecord
-end
