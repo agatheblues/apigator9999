@@ -8,7 +8,7 @@ class CreateAlbums < ActiveRecord::Migration[5.2]
       t.string :img_url
       t.integer :height
       t.integer :width
-
+      
       t.timestamps
     end
   end
