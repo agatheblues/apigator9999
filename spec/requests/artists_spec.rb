@@ -25,7 +25,7 @@ RSpec.describe 'Artists API', type: :request do
     before { get "/artists/#{artist_id}" }
 
     context 'when the record exists' do
-      it 'returns the todo' do
+      it 'returns the artist' do
         expect(json).not_to be_empty
         expect(json['id']).to eq(artist_id)
       end
@@ -43,7 +43,7 @@ RSpec.describe 'Artists API', type: :request do
       end
 
       it 'returns a not found message' do
-        expect(response.body).to match(/Couldn't find Todo/)
+        expect(response.body).to match(/Couldn't find Artist/)
       end
     end
   end
@@ -74,7 +74,7 @@ RSpec.describe 'Artists API', type: :request do
 
       it 'returns a validation failure message' do
         expect(response.body)
-          .to match(/Validation failed: Created by can't be blank/)
+          .to match(/Validation failed: Img url can't be blank/)
       end
     end
   end
