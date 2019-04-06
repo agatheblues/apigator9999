@@ -4,8 +4,8 @@ FactoryBot.define do
     name { Faker::Music.album }
     release_date { Faker::Date.backward(500) }
     img_url { Faker::LoremFlickr.image }
-    total_tracks { Faker::Number.number(10) }
-    height { Faker::Number.number(10) }
-    width { Faker::Number.number(10) }
+    total_tracks { Faker::Number.number(1) }
+    height { Faker::Number.number(3) }
+    width { Faker::Number.number(3) }
   end
 end
