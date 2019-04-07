@@ -8,7 +8,7 @@ RSpec.describe 'Albums API', type: :request do
   # Test suite for GET /albums
   describe 'GET /albums' do
     # make HTTP get request before each example
-    before { get '/albums' }
+    before { get "/albums" }
 
     it 'returns albums' do
       expect(json).not_to be_empty
@@ -59,7 +59,14 @@ RSpec.describe 'Albums API', type: :request do
         total_tracks: 7,
         height: 200,
         width: 200,
-        img_url: 'http://myalbum.com' 
+        img_url: 'http://myalbum.com',
+        album_sources_attributes: [
+          { source: 'discogs', source_id: 'sourceAlbum' }
+        ],
+        artists_attributes: [
+          { 'name' => 'My artist 0', 'img_url' => 'http://myartist.com' },
+          { 'name' => 'My artist 1', 'img_url' => 'http://myartist.com' },
+        ]
       }
     }
 
@@ -94,7 +101,7 @@ RSpec.describe 'Albums API', type: :request do
     let(:valid_attributes) { { name: 'My other album' } }
 
     context 'when the record exists' do
-      before { put "/albums/#{album_id}", params: valid_attributes }
+      before { put '/albums/#{album_id}', params: valid_attributes }
 
       it 'updates the record' do
         expect(response.body).to be_empty
