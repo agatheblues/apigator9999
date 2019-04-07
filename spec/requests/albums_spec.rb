@@ -74,7 +74,7 @@ RSpec.describe 'Albums API', type: :request do
       before { post '/albums', params: valid_attributes }
 
       it 'creates an album' do
-        expect(json['name']).to eq('My album')
+        expect(json['album']['name']).to eq('My album')
       end
 
       it 'returns status code 201' do
@@ -101,7 +101,7 @@ RSpec.describe 'Albums API', type: :request do
     let(:valid_attributes) { { name: 'My other album' } }
 
     context 'when the record exists' do
-      before { put '/albums/#{album_id}', params: valid_attributes }
+      before { put "/albums/#{album_id}", params: valid_attributes }
 
       it 'updates the record' do
         expect(response.body).to be_empty

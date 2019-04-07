@@ -8,7 +8,7 @@ class AlbumsController < ApplicationController
 
   def create
     @album = Album.create!(album_params)
-    json_response({:album => @album, :artists => @album.artists})
+    json_response({:album => @album, :artists => @album.artists}, :created)
   end
 
   def show
