@@ -8,7 +8,7 @@ class AlbumsController < ApplicationController
 
   def create
     @album = Album.create!(album_params)
-    json_response(@album, :created)
+    json_response({:album => @album, :artists => @album.artists})
   end
 
   def show
@@ -28,10 +28,15 @@ class AlbumsController < ApplicationController
   private
 
   def album_params
-    params.permit(:name, :added_at, :release_date, :height, :width, :img_url, :total_tracks)
+    params.permit(
+      :name, :added_at, :release_date, :height, :width, :img_url, :total_tracks, 
+      artists_attributes: [:id, :name, :img_url],
+      album_sources_attributes: [:source, :source_id]
+    ) 
   end
 
   def set_album
     @album = Album.find(params[:id])
   end
 end
+
