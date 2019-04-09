@@ -10,4 +10,5 @@ class Album < ApplicationRecord
 
   # validations
   validates_presence_of :name, :added_at, :release_date, :total_tracks, :img_url, :height, :width
+  validates_presence_of :album_sources, :artists, :on => :create
 end
