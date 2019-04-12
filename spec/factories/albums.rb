@@ -1,11 +1,18 @@
 FactoryBot.define do
-  factory :album do
-    added_at { Faker::Date.backward(14) }
-    name { Faker::Music.album }
-    release_date { Faker::Date.backward(500) }
-    img_url { Faker::LoremFlickr.image }
-    total_tracks { Faker::Number.number(1) }
-    height { Faker::Number.number(3) }
-    width { Faker::Number.number(3) }
+  sequence :email do |n|
+    "person#{n}@example.com"
+  end
+end
+
+  sequence :album do |n|
+    added_at { "Sun, 17 Feb 2019 20:56:11 GMT" }
+    name { "album_#{n}" }
+    release_date { 2018 }
+    img_url { "http://placekitten.com/400/400" }
+    total_tracks { 15 }
+    height { 400 }
+    width { 400 }
+    spotify_id { "spotify_id_#{n}" }
+    discogs_id { "discogs_id_#{n}" }
   end
 end
