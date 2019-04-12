@@ -7,12 +7,13 @@ class AlbumsController < ApplicationController
   end
 
   def create
-    if album_source_exists
-      json_response({ message: "This album already exists!" }, :conflict)
-    else 
-      @album = Album.create!(album_params)
-      json_response({:album => @album, :artists => @album.artists}, :created)
-    end
+    # if album_source_exists(params.require('album').require('spotify_id'), 'spotify')
+    #   json_response({ message: "This album already exists!" }, :conflict)
+    # elsif album_source_exists(params.require('album').require('discogs_id'), 'discogs')
+    #   json_response({ message: "This album already exists!" }, :conflict)
+    # else
+    @album = Album.create!(album_params)
+    json_response({:album => @album, :artists => @album.artists}, :created)
   end
 
   def show
@@ -32,10 +33,9 @@ class AlbumsController < ApplicationController
   private
 
   def album_params
-    params.require(:album).permit(
-      :name, :added_at, :release_date, :height, :width, :img_url, :total_tracks, 
-      artists_attributes: [:id, :name, :img_url],
-      album_sources_attributes: [:source, :source_id]
+    params.permit(
+      :name, :added_at, :release_date, :height, :width, :img_url, :total_tracks, :spotify_id,
+      artists_attributes: [:id, :name, :img_url]
     ) 
   end
 
@@ -43,13 +43,8 @@ class AlbumsController < ApplicationController
     @album = Album.find(params[:id])
   end
 
-  # TODO add tests
-  # TODO check if best way to do this
-  def album_source_exists
-    params.require(:album).require(:album_sources_attributes).each do |source|
-      return true if AlbumSource.exists?(source_id: source[:source_id], source: source[:source])
-    end
-    false
+  def album_source_exists(source_id, source_name)
+    AlbumSource.exists?("#{source_name}_id" => source_id)
   end
 end
 
