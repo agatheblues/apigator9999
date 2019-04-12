@@ -15,20 +15,13 @@ ActiveRecord::Schema.define(version: 2019_04_02_204102) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "album_sources", force: :cascade do |t|
-    t.string "source_id"
-    t.string "source"
-    t.bigint "album_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["album_id"], name: "index_album_sources_on_album_id"
-  end
-
   create_table "albums", force: :cascade do |t|
     t.string "added_at"
     t.string "name", null: false
     t.string "release_date"
     t.integer "total_tracks"
+    t.string "spotify_id"
+    t.string "discogs_id"
     t.string "img_url"
     t.integer "height"
     t.integer "width"
@@ -46,18 +39,11 @@ ActiveRecord::Schema.define(version: 2019_04_02_204102) do
     t.bigint "genre_id", null: false
   end
 
-  create_table "artist_sources", force: :cascade do |t|
-    t.string "source_id"
-    t.string "source"
-    t.bigint "artist_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["artist_id"], name: "index_artist_sources_on_artist_id"
-  end
-
   create_table "artists", force: :cascade do |t|
     t.string "name", null: false
     t.string "img_url"
+    t.string "spotify_id"
+    t.string "discogs_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -69,6 +55,4 @@ ActiveRecord::Schema.define(version: 2019_04_02_204102) do
     t.datetime "updated_at", null: false
   end
 
-  add_foreign_key "album_sources", "albums"
-  add_foreign_key "artist_sources", "artists"
 end

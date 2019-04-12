@@ -5,6 +5,8 @@ class CreateAlbums < ActiveRecord::Migration[5.2]
       t.string :name, null: false
       t.string :release_date
       t.integer :total_tracks
+      t.string :spotify_id
+      t.string :discogs_id
       t.string :img_url
       t.integer :height
       t.integer :width
