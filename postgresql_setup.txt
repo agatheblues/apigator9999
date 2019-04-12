@@ -1,0 +1,4 @@
+CREATE ROLE apigator9999 WITH LOGIN CREATEDB PASSWORD 'coucou';
+CREATE DATABASE apigator9999_production WITH OWNER apigator9999;
+CREATE DATABASE apigator9999_development WITH OWNER apigator9999;
+CREATE DATABASE apigator9999_test WITH OWNER apigator9999;
