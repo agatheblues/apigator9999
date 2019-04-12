@@ -51,7 +51,7 @@ RSpec.describe 'Albums API', type: :request do
   # Test suite for POST /albums
   describe 'POST /albums' do
     # valid payload
-    let(:valid_attributes) { 
+    let(:valid_attributes) do
       { 
         name: 'My album',
         added_at: 'Feb, 25 2015',
@@ -59,16 +59,15 @@ RSpec.describe 'Albums API', type: :request do
         total_tracks: 7,
         height: 200,
         width: 200,
-        img_url: 'http://myalbum.com',
-        album_sources_attributes: [
-          { source: 'discogs', source_id: 'sourceAlbum' }
-        ],
+        img_url: 'http://placekitten.com/400/400',
+        spotify_id: '7oqXnxR9Xg9Okhs17asfwe8S',
+        discogs_id: '123456',
         artists_attributes: [
-          { 'name' => 'My artist 0', 'img_url' => 'http://myartist.com' },
-          { 'name' => 'My artist 1', 'img_url' => 'http://myartist.com' },
+          { name: 'My artist 0', img_url: 'http://placekitten.com/300/300', spotify_id: '79a7fewf6q3wef9es' },
+          { name: 'My artist 1', img_url: 'http://placekitten.com/300/300', spotify_id: '564978asfasfdawef' },
         ]
       }
-    }
+    end
 
     context 'when the request is valid' do
       before { post '/albums', params: valid_attributes }
