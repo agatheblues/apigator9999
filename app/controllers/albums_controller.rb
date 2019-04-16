@@ -7,13 +7,13 @@ class AlbumsController < ApplicationController
   end
 
   def create
-    # if album_source_exists(params.require('album').require('spotify_id'), 'spotify')
-    #   json_response({ message: "This album already exists!" }, :conflict)
-    # elsif album_source_exists(params.require('album').require('discogs_id'), 'discogs')
-    #   json_response({ message: "This album already exists!" }, :conflict)
-    # else
     @album = Album.create!(album_params)
-    json_response({:album => @album, :artists => @album.artists}, :created)
+    if @album.save
+      json_response({:album => @album, :artists => @album.artists}, :created)
+    else
+      puts "OUI"
+      json_response(@album.errors[:base], :bad_request)
+    end
   end
 
   def show
