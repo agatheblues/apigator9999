@@ -7,12 +7,11 @@ class AlbumsController < ApplicationController
   end
 
   def create
-    @album = Album.create!(album_params)
+    @album = Album.new(album_params)
     if @album.save
       json_response({:album => @album, :artists => @album.artists}, :created)
     else
-      puts "OUI"
-      json_response(@album.errors[:base], :bad_request)
+      json_response({ :message => @album.errors.messages}, :bad_request)
     end
   end
 
@@ -41,10 +40,6 @@ class AlbumsController < ApplicationController
 
   def set_album
     @album = Album.find(params[:id])
-  end
-
-  def album_source_exists(source_id, source_name)
-    AlbumSource.exists?("#{source_name}_id" => source_id)
   end
 end
 
