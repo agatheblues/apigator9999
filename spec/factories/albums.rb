@@ -13,5 +13,6 @@ FactoryBot.define do
     width { 400 }
     spotify_id { generate(:spotify_id) }
     discogs_id { generate(:discogs_id) }
+    artists { |a| [a.association(:artist)] }
   end
 end

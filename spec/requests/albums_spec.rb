@@ -69,6 +69,23 @@ RSpec.describe 'Albums API', type: :request do
       }
     end
 
+    # invalid payload
+    let(:invalid_attributes) do
+      { 
+        name: 'My album',
+        added_at: 'Feb, 25 2015',
+        release_date: 'June 2018',
+        total_tracks: 7,
+        height: 200,
+        width: 200,
+        img_url: 'http://placekitten.com/400/400',
+        artists_attributes: [
+          { name: 'My artist 0', img_url: 'http://placekitten.com/300/300', spotify_id: '79a7fewf6q3wef9es' },
+          { name: 'My artist 1', img_url: 'http://placekitten.com/300/300', spotify_id: '564978asfasfdawef' },
+        ]
+      }
+    end
+
     context 'when the request is valid' do
       before { post '/albums', params: valid_attributes }
 
@@ -84,13 +101,22 @@ RSpec.describe 'Albums API', type: :request do
     context 'when the request is invalid' do
       before { post '/albums', params: { } }
 
-      it 'returns status code 422' do
-        expect(response).to have_http_status(422)
+      it 'returns status code 400' do
+        expect(response).to have_http_status(400)
+      end
+    end
+
+    
+    context 'when the request does not have a source' do
+      before { post '/albums', params: invalid_attributes }
+
+      it 'returns status code 400' do
+        expect(response).to have_http_status(400)
       end
 
       it 'returns a validation failure message' do
         expect(response.body)
-          .to match(/Validation failed: Name can't be blank/)
+          .to match(/either spotify_id or discogs_id must be present/)
       end
     end
   end

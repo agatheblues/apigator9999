@@ -8,7 +8,7 @@ class Album < ApplicationRecord
 
   # validations
   validates_presence_of :name, :added_at, :release_date, :total_tracks, :img_url, :height, :width
-  # validates_presence_of :artists, :on => :create
+  validates_presence_of :artists, :on => :create
 
   validate :at_least_one_source_exists, :sources_are_unique
 
