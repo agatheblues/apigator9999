@@ -3,7 +3,7 @@ FactoryBot.define do
     "artist_#{n}"
   end
 
-  factory :artist do 
+  factory :artist do
     name { generate(:artist_name) }
     img_url { "http://placekitten.com/300/300" }
     spotify_id { generate(:spotify_id) }

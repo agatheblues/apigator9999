@@ -1,11 +1,10 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe Album, type: :model do
-  
   # Association test
   it { should have_and_belong_to_many(:genres) }
   it { should have_and_belong_to_many(:artists) }
-  
+
   # Validation tests
   it { should validate_presence_of(:name) }
   it { should validate_presence_of(:added_at) }
@@ -14,5 +13,4 @@ RSpec.describe Album, type: :model do
   it { should validate_presence_of(:img_url) }
   it { should validate_presence_of(:height) }
   it { should validate_presence_of(:width) }
-
 end
