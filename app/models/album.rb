@@ -23,7 +23,9 @@ class Album < ApplicationRecord
   def sources_are_unique
     if (self[:spotify_id] && Album.exists?(:spotify_id => self[:spotify_id]))
       errors.add(:base, "this spotify_id already exists in the database")
-    elsif (self[:discogs_id] && Album.exists?(:discogs_id => self[:discogs_id]))
+    end
+
+    if (self[:discogs_id] && Album.exists?(:discogs_id => self[:discogs_id]))
       errors.add(:base, "this discogs_id already exists in the database")
     end
   end
