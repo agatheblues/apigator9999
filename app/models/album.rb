@@ -15,7 +15,7 @@ class Album < ApplicationRecord
   private 
 
   def at_least_one_source_exists
-    if (!self[:spotify_id].present? && !self[:discogs_id].present?) 
+    unless self[:spotify_id] || self[:discogs_id] 
       errors.add(:base, "either spotify_id or discogs_id must be present")
     end
   end
