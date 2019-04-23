@@ -43,7 +43,7 @@ RSpec.describe "Artists API", type: :request do
       end
 
       it "returns a not found message" do
-        expect(response.body).to match(/Couldn"t find Artist/)
+        expect(response.body).to match(/Couldn't find Artist/)
       end
     end
   end
@@ -93,8 +93,9 @@ RSpec.describe "Artists API", type: :request do
       end
 
       it "returns a validation failure message" do
-        expect(response.body).to
-        match(/Validation failed: Img url can"t be blank/)
+        expect(response.body).to match(
+          /Validation failed: Img url can't be blank/,
+        )
       end
     end
   end

@@ -43,7 +43,7 @@ RSpec.describe "Albums API", type: :request do
       end
 
       it "returns a not found message" do
-        expect(response.body).to match(/Couldn"t find Album/)
+        expect(response.body).to match(/Couldn't find Album/)
       end
     end
   end
@@ -106,8 +106,9 @@ RSpec.describe "Albums API", type: :request do
       end
 
       it "returns a validation failure message" do
-        expect(response.body).to
-        match(/either spotify_id or discogs_id must be present/)
+        expect(response.body).to match(
+          /either spotify_id or discogs_id must be present/,
+        )
       end
     end
   end
