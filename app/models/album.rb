@@ -1,3 +1,4 @@
+# Album describes the album model
 class Album < ApplicationRecord
   # model association
   has_and_belongs_to_many :genres
@@ -7,27 +8,23 @@ class Album < ApplicationRecord
   accepts_nested_attributes_for :artists
 
   # validations
-  validates_presence_of :name, :added_at, :release_date, :total_tracks, :img_url, :height, :width
-  validates_presence_of :artists, :on => :create
+  validates_presence_of :name, :added_at, :release_date, :total_tracks,
+                        :img_url, :height, :width
+  validates_presence_of :artists, on: :create
 
   validate :at_least_one_source_exists, :sources_are_unique
 
-  private 
+  private
 
   def at_least_one_source_exists
-    unless self[:spotify_id] || self[:discogs_id] 
-      errors.add(:base, "either spotify_id or discogs_id must be present")
-    end
+    errors.add(:base, 'either spotify_id or discogs_id must be present') unless
+    self[:spotify_id] || self[:discogs_id]
   end
 
   def sources_are_unique
-    if (self[:spotify_id] && Album.exists?(:spotify_id => self[:spotify_id]))
-      errors.add(:base, "this spotify_id already exists in the database")
-    end
-
-    if (self[:discogs_id] && Album.exists?(:discogs_id => self[:discogs_id]))
-      errors.add(:base, "this discogs_id already exists in the database")
-    end
+    errors.add(:base, 'this spotify_id already exists in the database') if
+    self[:spotify_id] && Album.exists?(spotify_id: self[:spotify_id])
+    errors.add(:base, 'this discogs_id already exists in the database') if
+    self[:discogs_id] && Album.exists?(discogs_id: self[:discogs_id])
   end
-
 end
