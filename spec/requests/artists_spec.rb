@@ -51,7 +51,27 @@ RSpec.describe 'Artists API', type: :request do
   # Test suite for POST /artists
   describe 'POST /artists' do
     # valid payload
-    let(:valid_attributes) { { name: 'My band', img_url: 'http://myband.com' } }
+    let(:valid_attributes) do
+      { 
+        name: 'My band', 
+        img_url: 'http://myband.com',
+        spotify_id: '7oqXnxR9Xg9Okhs17asfwe8S',
+        discogs_id: '123456',
+        albums_attributes: [
+          { 
+            name: 'Album_0',
+            added_at: 'Feb, 25 2015',
+            release_date: 'June 2018',
+            total_tracks: 7,
+            height: 200,
+            width: 200,
+            img_url: 'http://placekitten.com/400/400',
+            spotify_id: '5oqXnxR9Xg9Okhs17asfwe8S',
+            discogs_id: '197564'
+          }
+        ]
+      }
+    end
 
     context 'when the request is valid' do
       before { post '/artists', params: valid_attributes }

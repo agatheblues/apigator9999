@@ -28,7 +28,7 @@ class ArtistsController < ApplicationController
   private
 
   def artist_params
-    params.permit(:name, :img_url)
+    params.permit(:name, :img_url, :spotify_id, :discogs_id)
   end
 
   def set_artist

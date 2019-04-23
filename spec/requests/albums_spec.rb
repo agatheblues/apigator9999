@@ -69,6 +69,9 @@ RSpec.describe 'Albums API', type: :request do
       }
     end
 
+    # invalid payload
+    let(:invalid_attributes) { valid_attributes.except(:spotify_id, :discogs_id) }
+
     context 'when the request is valid' do
       before { post '/albums', params: valid_attributes }
 
@@ -84,13 +87,22 @@ RSpec.describe 'Albums API', type: :request do
     context 'when the request is invalid' do
       before { post '/albums', params: { } }
 
-      it 'returns status code 422' do
-        expect(response).to have_http_status(422)
+      it 'returns status code 400' do
+        expect(response).to have_http_status(400)
+      end
+    end
+
+    
+    context 'when the request does not have a source' do
+      before { post '/albums', params: invalid_attributes }
+
+      it 'returns status code 400' do
+        expect(response).to have_http_status(400)
       end
 
       it 'returns a validation failure message' do
         expect(response.body)
-          .to match(/Validation failed: Name can't be blank/)
+          .to match(/either spotify_id or discogs_id must be present/)
       end
     end
   end

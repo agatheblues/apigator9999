@@ -7,13 +7,12 @@ class AlbumsController < ApplicationController
   end
 
   def create
-    # if album_source_exists(params.require('album').require('spotify_id'), 'spotify')
-    #   json_response({ message: "This album already exists!" }, :conflict)
-    # elsif album_source_exists(params.require('album').require('discogs_id'), 'discogs')
-    #   json_response({ message: "This album already exists!" }, :conflict)
-    # else
-    @album = Album.create!(album_params)
-    json_response({:album => @album, :artists => @album.artists}, :created)
+    @album = Album.new(album_params)
+    if @album.save
+      json_response({:album => @album, :artists => @album.artists}, :created)
+    else
+      json_response({ :message => @album.errors.messages}, :bad_request)
+    end
   end
 
   def show
@@ -34,17 +33,13 @@ class AlbumsController < ApplicationController
 
   def album_params
     params.permit(
-      :name, :added_at, :release_date, :height, :width, :img_url, :total_tracks, :spotify_id,
-      artists_attributes: [:id, :name, :img_url]
+      :name, :added_at, :release_date, :height, :width, :img_url, :total_tracks, :spotify_id, :discogs_id,
+      artists_attributes: [:id, :name, :img_url, :spotify_id, :discogs_id]
     ) 
   end
 
   def set_album
     @album = Album.find(params[:id])
-  end
-
-  def album_source_exists(source_id, source_name)
-    AlbumSource.exists?("#{source_name}_id" => source_id)
   end
 end
 

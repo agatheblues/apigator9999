@@ -12,7 +12,4 @@ Rails.application.routes.draw do
   get '/albums/:id', to: 'albums#show'
   put '/albums/:id', to: 'albums#update'
   delete '/albums/:id', to: 'albums#destroy'
-
-  # ARTIST'S ALBUMS
-  get '/artists/:artist_id/albums', to: 'artist_albums#index'
 end
