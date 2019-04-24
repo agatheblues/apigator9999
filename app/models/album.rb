@@ -14,6 +14,11 @@ class Album < ApplicationRecord
 
   validate :at_least_one_source_exists, :sources_are_unique
 
+  def as_json(*)
+    super(include: { artists: { except: [:created_at, :updated_at] } },
+          except: [:created_at, :updated_at])
+  end
+
   private
 
   def at_least_one_source_exists

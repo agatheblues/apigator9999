@@ -8,4 +8,9 @@ class Artist < ApplicationRecord
 
   # validations
   validates_presence_of :name, :img_url
+
+  def as_json(*)
+    super(include: { albums: { except: [:created_at, :updated_at] } },
+          except: [:created_at, :updated_at])
+  end
 end
