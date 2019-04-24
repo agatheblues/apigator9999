@@ -317,6 +317,10 @@ Style/Sample:
   Reference: 'https://github.com/JuanitoFatas/fast-ruby#arrayshufflefirst-vs-arraysample-code'
   Enabled: false
 
+Style/SymbolArray:
+  Description: 'Use `[]` for an array of symbols.'
+  EnforcedStyle: brackets
+  
 Style/SelfAssignment:
   Description: >-
                  Checks for places where self-assignment shorthand should have
