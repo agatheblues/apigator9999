@@ -15,6 +15,8 @@ class Album < ApplicationRecord
   validate :at_least_one_source_exists
   validate :sources_are_unique, on: :create
 
+  before_destroy { artists.clear }
+
   def as_json(*)
     super(include: { artists: { except: [:created_at, :updated_at] } },
           except: [:created_at, :updated_at])
