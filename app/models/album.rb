@@ -12,7 +12,8 @@ class Album < ApplicationRecord
                         :img_url, :height, :width
   validates_presence_of :artists, on: :create
 
-  validate :at_least_one_source_exists, :sources_are_unique
+  validate :at_least_one_source_exists
+  validate :sources_are_unique, on: :create
 
   def as_json(*)
     super(include: { artists: { except: [:created_at, :updated_at] } },
