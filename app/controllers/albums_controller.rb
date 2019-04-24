@@ -21,7 +21,11 @@ class AlbumsController < ApplicationController
 
   def update
     @album.update(album_params)
-    head :no_content
+    if @album.save
+      head :no_content
+    else
+      json_response({ message: @album.errors.messages }, :bad_request)
+    end
   end
 
   def destroy
