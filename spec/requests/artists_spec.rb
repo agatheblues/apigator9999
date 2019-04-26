@@ -73,6 +73,11 @@ RSpec.describe "Artists API", type: :request do
       }
     end
 
+    # invalid payload
+    let(:invalid_attributes) do
+      valid_attributes.except(:spotify_id, :discogs_id)
+    end
+
     context "when the request is valid" do
       before { post "/artists", params: valid_attributes }
 
@@ -89,12 +94,20 @@ RSpec.describe "Artists API", type: :request do
       before { post "/artists", params: { name: "Foobar" } }
 
       it "returns status code 422" do
-        expect(response).to have_http_status(422)
+        expect(response).to have_http_status(400)
+      end
+    end
+
+    context "when the request does not have a source" do
+      before { post "/artists", params: invalid_attributes }
+
+      it "returns status code 400" do
+        expect(response).to have_http_status(400)
       end
 
       it "returns a validation failure message" do
         expect(response.body).to match(
-          /Validation failed: Img url can't be blank/,
+          /either spotify_id or discogs_id must be present/,
         )
       end
     end
@@ -105,7 +118,7 @@ RSpec.describe "Artists API", type: :request do
     let(:valid_attributes) { { name: "My other band" } }
 
     context "when the record exists" do
-      before { put "/artists/#{artist_id}", params: valid_attributes }
+      before { patch "/artists/#{artist_id}", params: valid_attributes }
 
       it "updates the record" do
         expect(response.body).to be_empty
