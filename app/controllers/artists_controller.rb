@@ -1,14 +1,18 @@
 class ArtistsController < ApplicationController
   before_action :set_artist, only: [:show, :update, :destroy]
-  
+
   def index
     @artists = Artist.all
-    json_response(@artists)  
+    json_response(@artists)
   end
 
   def create
-    @artist = Artist.create!(artist_params)
-    json_response(@artist, :created)
+    @artist = Artist.new(artist_params)
+    if @artist.save
+      json_response(@artist, :created)
+    else
+      json_response({ message: @artist.errors.messages }, :bad_request)
+    end
   end
 
   def show
@@ -17,7 +21,11 @@ class ArtistsController < ApplicationController
 
   def update
     @artist.update(artist_params)
-    head :no_content
+    if @artist.save
+      head :no_content
+    else
+      json_response({ message: @artist.errors.messages }, :bad_request)
+    end
   end
 
   def destroy
@@ -28,7 +36,12 @@ class ArtistsController < ApplicationController
   private
 
   def artist_params
-    params.permit(:name, :img_url, :spotify_id, :discogs_id)
+    params.permit(
+      :name, :img_url, :spotify_id, :discogs_id,
+      albums_attributes: [
+        :name, :added_at, :release_date, :height, :width,
+        :img_url, :total_tracks, :spotify_id, :discogs_id
+      ])
   end
 
   def set_artist
