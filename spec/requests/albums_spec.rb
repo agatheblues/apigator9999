@@ -114,7 +114,7 @@ RSpec.describe "Albums API", type: :request do
   end
 
   # Test suite for PUT /albums/:id
-  describe "PUT /albums/:id" do
+  describe "PATCH /albums/:id" do
     let(:valid_attributes) { { name: "My other album" } }
 
     context "when the record exists" do
