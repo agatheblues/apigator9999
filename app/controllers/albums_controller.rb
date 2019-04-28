@@ -39,7 +39,8 @@ class AlbumsController < ApplicationController
     params.permit(
       :name, :added_at, :release_date, :height, :width, :img_url, :total_tracks,
       :spotify_id, :discogs_id,
-      artists_attributes: [:id, :name, :img_url, :spotify_id, :discogs_id]
+      artists_attributes: [:id, :name, :img_url, :spotify_id, :discogs_id],
+      genres_attributes: [:category, :name]
     )
   end
 

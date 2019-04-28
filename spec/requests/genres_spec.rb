@@ -119,7 +119,6 @@ RSpec.describe "Genres API", type: :request do
         )
       end
     end
-
   end
 
   describe "PATCH /genres/:id" do
