@@ -1,5 +1,7 @@
 class GenresController < ApplicationController
 
+  before_action :set_genre, only: [:show, :update, :destroy]
+
   def index
     @genres = Genre.all
     json_response(@genres)
@@ -15,7 +17,7 @@ class GenresController < ApplicationController
   end
 
   def show
-    json_response(@genre)
+    json_response(@genre.as_json(expand: true))
   end
 
   def update
@@ -35,7 +37,7 @@ class GenresController < ApplicationController
   private
 
   def genre_params
-    params.permit(:name, :type)
+    params.permit(:name, :category)
   end
 
   def set_genre
