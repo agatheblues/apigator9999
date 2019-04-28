@@ -5,7 +5,7 @@ class Album < ApplicationRecord
   has_and_belongs_to_many :artists
 
   # nested attributes
-  accepts_nested_attributes_for :artists
+  accepts_nested_attributes_for :artists, :genres
 
   # validations
   validates_presence_of :name, :added_at, :release_date, :total_tracks,
@@ -18,8 +18,13 @@ class Album < ApplicationRecord
   before_destroy { artists.clear }
 
   def as_json(*)
-    super(include: { artists: { except: [:created_at, :updated_at] } },
-          except: [:created_at, :updated_at])
+    super(
+      include:
+        {
+          artists: { except: [:created_at, :updated_at] },
+          genres: { except: [:created_at, :updated_at] },
+        },
+      except: [:created_at, :updated_at])
   end
 
   private
