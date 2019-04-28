@@ -102,6 +102,24 @@ RSpec.describe "Genres API", type: :request do
         )
       end
     end
+
+    context "when the genre already exists" do
+      before do
+        post "/genres", params: valid_attributes
+        post "/genres", params: valid_attributes
+      end
+
+      it "returns status code 400" do
+        expect(response).to have_http_status(400)
+      end
+
+      it "returns a validation failure message" do
+        expect(response.body).to match(
+          /has already been taken/,
+        )
+      end
+    end
+
   end
 
   describe "PATCH /genres/:id" do
