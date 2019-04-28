@@ -15,4 +15,8 @@ Rails.application.routes.draw do
 
   # GENRES
   get "/genres", to: "genres#index"
+  post "/genres", to: "genres#create"
+  get "/genres/:id", to: "genres#show"
+  patch "/genres/:id", to: "genres#update"
+  delete "/genres/:id", to: "genres#destroy"
 end
