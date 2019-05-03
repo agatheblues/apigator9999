@@ -22,7 +22,7 @@ class ArtistsController < ApplicationController
   def update
     @artist.update(artist_params)
     if @artist.save
-      head :no_content
+      json_response(message: "Artist successfully updated!")
     else
       json_response({ message: @artist.errors.messages }, :bad_request)
     end

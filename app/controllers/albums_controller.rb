@@ -22,7 +22,7 @@ class AlbumsController < ApplicationController
   def update
     @album.update(album_params)
     if @album.save
-      head :no_content
+      json_response(message: "ALbum successfully updated!")
     else
       json_response({ message: @album.errors.messages }, :bad_request)
     end

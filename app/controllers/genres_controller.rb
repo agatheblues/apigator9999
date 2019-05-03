@@ -23,7 +23,7 @@ class GenresController < ApplicationController
   def update
     @genre.update(genre_params)
     if @genre.save
-      head :no_content
+      json_response(message: "Genre successfully updated!")
     else
       json_response({ message: @genre.errors.messages }, :bad_request)
     end
