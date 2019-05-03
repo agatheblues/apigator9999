@@ -60,7 +60,7 @@ RSpec.describe "Genres API", type: :request do
     let(:valid_attributes) do
       {
         name: "genre_0",
-        category: "style"
+        category: "style",
       }
     end
 
