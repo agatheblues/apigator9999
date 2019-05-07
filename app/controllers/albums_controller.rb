@@ -8,6 +8,8 @@ class AlbumsController < ApplicationController
 
   def create
     @album = Album.new(album_params)
+    @album.genres = album_params["genres_attributes"].map { |genre| get_genre(genre) }
+
     if @album.save
       json_response(@album, :created)
     else
@@ -46,5 +48,9 @@ class AlbumsController < ApplicationController
 
   def set_album
     @album = Album.find(params[:id])
+  end
+
+  def get_genre(genre)
+    Genre.find_by(name: genre["name"], category: genre["category"]) || Genre.new(genre)
   end
 end
