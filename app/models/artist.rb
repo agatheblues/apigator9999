@@ -1,7 +1,7 @@
 # The Artist model
 class Artist < ApplicationRecord
   # model association
-  has_and_belongs_to_many :albums
+  has_and_belongs_to_many :albums, dependent: :destroy
 
   # nested attributes
   accepts_nested_attributes_for :albums
@@ -12,8 +12,6 @@ class Artist < ApplicationRecord
 
   validate :at_least_one_source_is_present
   validate :sources_are_unique, on: :create
-
-  before_destroy { albums.clear }
 
   def as_json(*)
     super(include: { albums: { except: [:created_at, :updated_at] } },

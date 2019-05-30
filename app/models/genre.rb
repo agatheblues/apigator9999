@@ -1,13 +1,14 @@
 # The Genre model
 class Genre < ApplicationRecord
   # model associations
-  has_and_belongs_to_many :albums
+  has_and_belongs_to_many :albums, dependent: :destroy
+
+  # Scope
+  default_scope { joins(:albums).distinct.select('genres.*, COUNT(albums.*) AS albums_count').group('genre.id').where('album_count > 0') }
 
   # Validations
   validates_presence_of :name, :category
   validates_uniqueness_of :name, scope: :category
-
-  before_destroy { albums.clear }
 
   def as_json(options = { expand: false })
     if options[:expand]

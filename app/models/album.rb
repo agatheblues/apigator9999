@@ -1,8 +1,8 @@
 # Album describes the album model
 class Album < ApplicationRecord
   # model association
-  has_and_belongs_to_many :genres
-  has_and_belongs_to_many :artists
+  has_and_belongs_to_many :genres, dependent: :destroy
+  has_and_belongs_to_many :artists, dependent: :destroy
 
   # nested attributes
   accepts_nested_attributes_for :artists, :genres
