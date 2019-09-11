@@ -9,4 +9,5 @@ json.albums @albums.each do |album|
   json.img_url album.img_url
   json.img_height album.img_height
   json.img_width album.img_width
+  json.artists album.artists
 end

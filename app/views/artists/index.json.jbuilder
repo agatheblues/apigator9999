@@ -4,4 +4,5 @@ json.artists @artists.each do |artist|
   json.spotify_id artist.spotify_id
   json.discogs_id artist.discogs_id
   json.img_url artist.img_url
+  json.albums artist.albums
 end
