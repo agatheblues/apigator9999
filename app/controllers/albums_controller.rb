@@ -5,8 +5,7 @@ class AlbumsController < ApplicationController
     @albums = Album.all
   end
 
-  def show
-  end
+  def show; end
 
   private
 

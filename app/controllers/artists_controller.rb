@@ -5,13 +5,11 @@ class ArtistsController < ApplicationController
     @artists = Artist.all
   end
 
-  def show
-  end
+  def show; end
 
   private
 
   def set_artist
     @artist = Artist.find(params[:id])
   end
-
 end

@@ -2,7 +2,7 @@ class CreateAlbums < ActiveRecord::Migration[5.2]
   def change
     create_table :albums do |t|
       t.datetime :added_at, null: false
-      t.string :name, null:false
+      t.string :name, null: false
       t.string :release_date
       t.string :spotify_id
       t.string :discogs_id
