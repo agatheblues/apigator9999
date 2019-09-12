@@ -6,4 +6,5 @@ Rails.application.routes.draw do
   # Albums
   get 'albums', to: 'albums#index', format: 'json'
   get 'albums/:id', to: 'albums#show', format: 'json', as: :album
+  post 'albums', to: 'albums#create', format: 'json'
 end
