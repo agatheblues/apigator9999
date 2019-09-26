@@ -15,6 +15,10 @@ module Error
     def render_unprocessable_entity_response
       render_error_response(422, :unprocessable_entity, 'Cannot process entity for some reason')
     end
+
+    def render_conflict_response
+      render_error_response(409, :conflict, 'This entity already exists')
+    end
   end
 
   # def render_error_response(exception)

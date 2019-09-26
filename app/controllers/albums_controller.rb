@@ -22,7 +22,7 @@ class AlbumsController < ApplicationController
 
   def album_params
     params.require(:album).permit(
-      :name, :release_date, :added_at, :total_tracks, :img_url, :img_width, :img_height, :spotify_id,
+      :name, :release_date, :added_at, :total_tracks, :img_url, :img_width, :img_height, :spotify_id, :discogs_id,
       artists_attributes: [:id, :name, :img_url, :spotify_id, :discogs_id]
     ) 
   end
