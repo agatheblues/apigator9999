@@ -13,6 +13,6 @@ class CreateAlbums < ActiveRecord::Migration[5.2]
       t.timestamps
     end
 
-    add_index :albums, ["spotify_id", "discogs_id"], :unique => true
+    add_index(:albums, [:spotify_id, :discogs_id], unique: true)
   end
 end

@@ -7,5 +7,7 @@ class CreateArtists < ActiveRecord::Migration[5.2]
       t.string :discogs_id
       t.timestamps
     end
+
+    add_index(:artists, [:spotify_id, :discogs_id], unique: true)
   end
 end
