@@ -27,7 +27,8 @@ ActiveRecord::Schema.define(version: 2019_09_11_151453) do
     t.integer "img_width"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["spotify_id", "discogs_id"], name: "index_albums_on_spotify_id_and_discogs_id", unique: true
+    t.index ["discogs_id"], name: "index_albums_on_discogs_id", unique: true
+    t.index ["spotify_id"], name: "index_albums_on_spotify_id", unique: true
   end
 
   create_table "albums_artists", id: false, force: :cascade do |t|
@@ -42,7 +43,8 @@ ActiveRecord::Schema.define(version: 2019_09_11_151453) do
     t.string "discogs_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["spotify_id", "discogs_id"], name: "index_artists_on_spotify_id_and_discogs_id", unique: true
+    t.index ["discogs_id"], name: "index_artists_on_discogs_id", unique: true
+    t.index ["spotify_id"], name: "index_artists_on_spotify_id", unique: true
   end
 
 end
