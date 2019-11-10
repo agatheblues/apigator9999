@@ -34,6 +34,7 @@ group :development, :test do
   # gem 'rubocop'
   gem 'factory_bot_rails'
   gem 'database_cleaner'
+  gem "json_matchers"
 end
 
 group :development do

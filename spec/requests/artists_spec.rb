@@ -16,6 +16,10 @@ describe "GET /artists gets all artist", :type => :request do
   it 'returns status code 200' do
     expect(response).to have_http_status(:success)
   end
+
+  it 'has the correct schema' do
+    expect(response).to match_json_schema("artist/artists")
+  end
 end
 
 describe "GET /artists/:id gets the artist", :type => :request do
@@ -28,5 +32,9 @@ describe "GET /artists/:id gets the artist", :type => :request do
 
   it 'returns status code 200' do
     expect(response).to have_http_status(:success)
+  end
+
+  it 'has the correct schema' do
+    expect(response).to match_json_schema("artist/artist")
   end
 end

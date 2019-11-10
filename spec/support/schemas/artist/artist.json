@@ -1,0 +1,61 @@
+{
+  "id": "file:/artist.json#",
+  "type": "object",
+  "required": [
+    "id",
+    "name",
+    "img_url",
+    "spotify_id",
+    "discogs_id",
+    "albums"
+  ],
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "name": {
+      "type": "string"
+    },
+    "img_url": {
+      "type": "string"
+    },
+    "albums": {
+      "type": "array",
+      "items": {
+        "$ref": "file:/album.json#"
+      }
+    }
+  },
+  "anyOf": [
+    {
+      "properties": {
+        "spotify_id": {
+          "type": "string"
+        },
+        "discogs_id": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "properties": {
+        "spotify_id": {
+          "type": "string"
+        },
+        "discogs_id": {
+          "type": "null"
+        }
+      }
+    },
+    {
+      "properties": {
+        "spotify_id": {
+          "type": "null"
+        },
+        "discogs_id": {
+          "type": "string"
+        }
+      }
+    }
+  ]
+}
