@@ -1,5 +1,5 @@
 {
-  "id": "file:/album.json#",
+  "id": "file:/album_without_artists.json#",
   "type": "object",
   "required": [
     "id",
@@ -11,8 +11,7 @@
     "img_height",
     "img_width",
     "spotify_id",
-    "discogs_id",
-    "artists"
+    "discogs_id"
   ],
   "properties": {
     "id": {
@@ -38,12 +37,6 @@
     },
     "img_width": {
       "type": "integer"
-    },
-    "artists": {
-      "type": "array",
-      "items": {
-        "$ref": "file:/artist_without_albums.json#"
-      }
     }
   },
   "anyOf": [

@@ -1,18 +1,12 @@
 {
-  "id": "file:/album.json#",
+  "id": "file:/artist_without_albums.json#",
   "type": "object",
   "required": [
     "id",
     "name",
-    "added_at",
-    "release_date",
-    "total_tracks",
     "img_url",
-    "img_height",
-    "img_width",
     "spotify_id",
-    "discogs_id",
-    "artists"
+    "discogs_id"
   ],
   "properties": {
     "id": {
@@ -21,29 +15,8 @@
     "name": {
       "type": "string"
     },
-    "added_at": {
-      "type": "string"
-    },
-    "release_date": {
-      "type": "string"
-    },
-    "total_tracks": {
-      "type": "integer"
-    },
     "img_url": {
       "type": "string"
-    },
-    "img_height": {
-      "type": "integer"
-    },
-    "img_width": {
-      "type": "integer"
-    },
-    "artists": {
-      "type": "array",
-      "items": {
-        "$ref": "file:/artist_without_albums.json#"
-      }
     }
   },
   "anyOf": [

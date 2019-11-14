@@ -22,7 +22,7 @@
     "albums": {
       "type": "array",
       "items": {
-        "$ref": "file:/album.json#"
+        "$ref": "file:/album_without_artists.json#"
       }
     }
   },

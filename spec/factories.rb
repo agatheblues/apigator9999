@@ -12,7 +12,6 @@ FactoryBot.define do
         rand() > 0.5 ? "discogs_#{n}" : nil 
       end
     end
-    # album
   end
 
   factory :album do
@@ -34,17 +33,5 @@ FactoryBot.define do
     after(:create) do |album|
       album.artists = create_list(:artist, rand(1..3), albums: [album])
     end
-    # artists { create_list(:artist, rand(1..3) }
- 
-
-    # factory :album_with_artists do
-    #   transient do
-    #     artists_count { rand(1..3) }
-    #   end
-
-    #   after(:create) do |album, evaluator|
-    #     artists { create_list(:artist, evaluator.artists_count, albums: [album]) }
-    #   end
-    # end
   end
 end
