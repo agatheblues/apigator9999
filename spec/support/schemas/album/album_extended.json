@@ -1,5 +1,5 @@
 {
-  "id": "file:/album.json#",
+  "id": "file:/album_extended.json#",
   "type": "object",
   "required": [
     "id",
