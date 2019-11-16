@@ -8,6 +8,11 @@ class AlbumsController < ApplicationController
   def show; end
 
   def create
+    if !params.has_key?(:artists)
+      render json: {status: "error", code: 4000, message: "artists should not be blank"}, status: :bad_request
+      return
+    end
+
     begin
       ActiveRecord::Base.transaction do
         @album = Album.new(album_params)
@@ -16,7 +21,14 @@ class AlbumsController < ApplicationController
         artist_params[:artists].each do |artist|
           ActiveRecord::Base.transaction do
             @artist_ids = artist_ids(artist)
-            @artist = Artist.exists?(@artist_ids) ? Artist.find_by(@artist_ids) : Artist.create!(artist)
+
+            if Artist.exists?(@artist_ids)
+              @artist = Artist.find_by(@artist_ids)
+              @artist.update(artist)
+            else
+              @artist = Artist.create!(artist)
+            end
+
             @album.artists << @artist
           end
         end
@@ -24,7 +36,7 @@ class AlbumsController < ApplicationController
         render :show, status: :created
       end
     rescue ActiveRecord::RecordInvalid => exception
-      render json: {status: "error", code: 4000, message: exception}
+      render json: {status: "error", code: 4000, message: exception}, status: :bad_request
     end
   end
 
@@ -35,7 +47,7 @@ class AlbumsController < ApplicationController
   end
 
   def album_params
-    params.require(:album).permit(:name, :release_date, :added_at, :total_tracks, :img_url, :img_width, 
+    params.permit(:name, :release_date, :added_at, :total_tracks, :img_url, :img_width, 
       :img_height, :spotify_id, :discogs_id)
   end
 

@@ -5,7 +5,7 @@ class Album < ApplicationRecord
   validates :added_at, presence: true
   validates :name, presence: true
   validate :has_at_least_one_id
-
+  
   validates_associated :artists
 
   def has_at_least_one_id

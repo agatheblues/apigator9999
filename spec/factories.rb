@@ -30,6 +30,7 @@ FactoryBot.define do
         rand() > 0.5 ? "discogs_#{n}" : nil 
       end
     end
+
     after(:create) do |album|
       album.artists = create_list(:artist, rand(1..3), albums: [album])
     end
