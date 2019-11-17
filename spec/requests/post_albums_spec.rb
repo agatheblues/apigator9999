@@ -1,7 +1,9 @@
 require 'rails_helper'
 
 describe "GET /albums gets all albums", :type => :request do
-  let!(:albums) { FactoryBot.create_list(:album, 10)}
+  setup do 
+    @albums = FactoryBot.create_list(:album, 10)
+  end
 
   before {get '/albums'}
 
@@ -19,23 +21,40 @@ describe "GET /albums gets all albums", :type => :request do
 end
 
 describe "GET /albums/:id gets the album", :type => :request do
-  let!(:id) { FactoryBot.create(:album).id }
-  before {get "/albums/#{id}"}
+  context "with valid id" do
+    setup do
+      @id = FactoryBot.create(:album).id
+    end
 
-  it 'returns the correct album' do
-    expect(json['id']).to eq(id)
+    before {get "/albums/#{@id}"}
+
+    it 'returns the correct album' do
+      expect(json['id']).to eq(@id)
+    end
+
+    it 'returns status code 200' do
+      expect(response).to have_http_status(:success)
+    end
+
+    it 'has the correct schema' do
+      expect(response).to match_json_schema("album/album_extended")
+    end
   end
 
-  it 'returns status code 200' do
-    expect(response).to have_http_status(:success)
-  end
+  context "with invalid id" do
+    before {get "/albums/-1"}
 
-  it 'has the correct schema' do
-    expect(response).to match_json_schema("album/album_extended")
+    it 'returns status code 404' do
+      expect(response).to have_http_status(:not_found)
+    end
+
+    it 'returns an error message' do
+      expect(response).to match_json_schema("error/error")
+    end
   end
 end
 
-describe "POST /albums" do
+describe "POST /albums", :type => :request do
   setup do
     @album = FactoryBot.attributes_for(:album)
     @artists = FactoryBot.attributes_for_list(:artist, 3)
@@ -60,7 +79,7 @@ describe "POST /albums" do
       expect(json['name']).to eq(@album[:name])
     end
   
-    it 'returns status code 200' do
+    it 'returns status code 201' do
       post "/albums", params: @album
       expect(response).to have_http_status(:created)
     end
@@ -168,6 +187,11 @@ describe "POST /albums" do
       }.to change(Album, :count).by(1)
     end
     
+    it 'returns status code 201' do
+      post "/albums", params: @album
+      expect(response).to have_http_status(:created)
+    end
+
     it "does not create a new artist" do
       expect{
         post "/albums", params: @album
@@ -205,4 +229,51 @@ describe "POST /albums" do
       expect(response).to match_json_schema("error/error")
     end
   end 
+end
+
+describe "PATCH /albums/:id updates the album", :type => :request do
+  context "with valid id" do
+    setup do
+      @id = FactoryBot.create(:album).id
+      @update_params = FactoryBot.attributes_for(:album)
+    end
+
+    before {patch "/albums/#{@id}", params: @update_params}
+
+    it 'returns the correct album' do
+      expect(json['id']).to eq(@id)
+    end
+
+    it 'returns status code 200' do
+      expect(response).to have_http_status(:ok)
+    end
+
+    it 'has the correct schema' do
+      expect(response).to match_json_schema("album/album_extended")
+    end
+
+    it 'updated the album' do
+      expect(json['name']).to eq(@update_params[:name])
+      expect(json['added_at']).to eq(@update_params[:added_at])
+      expect(json['release_date']).to eq(@update_params[:release_date])
+      expect(json['total_tracks']).to eq(@update_params[:total_tracks])
+      expect(json['img_url']).to eq(@update_params[:img_url])
+      expect(json['img_width']).to eq(@update_params[:img_width])
+      expect(json['img_height']).to eq(@update_params[:img_height])
+      expect(json['spotify_id']).to eq(@update_params[:spotify_id])
+      expect(json['discogs_id']).to eq(@update_params[:discogs_id])
+    end
+  end
+
+  context "with invalid id" do
+    before {patch "/albums/-1"}
+
+    it 'returns status code 404' do
+      expect(response).to have_http_status(:not_found)
+    end
+
+    it 'returns an error message' do
+      expect(response).to match_json_schema("error/error")
+    end
+  end
 end

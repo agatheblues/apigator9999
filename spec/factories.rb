@@ -16,7 +16,7 @@ FactoryBot.define do
 
   factory :album do
     sequence(:name) { |n| "Album #{n}" }
-    sequence(:added_at) { |n| "#{2019 - n}-01-01"}
+    sequence(:added_at) { |n| "#{2019 - n}-01-01T00:16:48.000Z"}
     sequence(:release_date) { |n| "#{2016 - n}-01-01"}
     sequence(:total_tracks) { |n| n}
     img_url {"https://placekitten.com/200/300"}

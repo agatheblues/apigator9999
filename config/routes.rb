@@ -3,8 +3,5 @@ Rails.application.routes.draw do
   get 'artists', to: 'artists#index', format: 'json'
   get 'artists/:id', to: 'artists#show', format: 'json', as: :artist
 
-  # Albums
-  get 'albums', to: 'albums#index', format: 'json'
-  get 'albums/:id', to: 'albums#show', format: 'json', as: :album
-  post 'albums', to: 'albums#create', format: 'json'
+  resources :albums, format: 'json'
 end

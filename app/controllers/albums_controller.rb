@@ -1,5 +1,5 @@
 class AlbumsController < ApplicationController
-  before_action :set_album, only: [:show]
+  before_action :set_album, only: [:show, :update]
 
   def index
     @albums = Album.all
@@ -20,15 +20,7 @@ class AlbumsController < ApplicationController
 
         artist_params[:artists].each do |artist|
           ActiveRecord::Base.transaction do
-            @artist_ids = artist_ids(artist)
-
-            if Artist.exists?(@artist_ids)
-              @artist = Artist.find_by(@artist_ids)
-              @artist.update(artist)
-            else
-              @artist = Artist.create!(artist)
-            end
-
+            @artist = create_or_update(artist) 
             @album.artists << @artist
           end
         end
@@ -40,6 +32,14 @@ class AlbumsController < ApplicationController
     end
   end
 
+  def update
+    if @album.update(album_params)
+      render :show, status: :ok
+    else
+      render json: {status: "error", code: 4000, message: "Could not update album"}, status: :bad_request
+    end
+  end
+  
   private
 
   def set_album
@@ -65,5 +65,17 @@ class AlbumsController < ApplicationController
     else
       {spotify_id: artist['spotify_id'], discogs_id: artist['discogs_id']}
     end
+  end
+
+  def create_or_update(artist_params) 
+    artist_ids = artist_ids(artist_params)
+
+    if Artist.exists?(artist_ids)
+      artist = Artist.find_by(artist_ids)
+      artist.update(artist_params)
+      return artist
+    end
+
+    Artist.create!(artist_params)
   end
 end
