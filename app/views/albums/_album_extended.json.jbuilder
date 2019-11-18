@@ -8,4 +8,5 @@ json.total_tracks album.total_tracks
 json.img_url @album.img_url
 json.img_height @album.img_height
 json.img_width @album.img_width
-json.artists @album.artists
+json.artists @album.artists, partial: 'artists/artist_short', as: :artist
+json.genres @album.genres, partial: 'genres/genre', as: :genre

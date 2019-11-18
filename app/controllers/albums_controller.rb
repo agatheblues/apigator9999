@@ -18,11 +18,22 @@ class AlbumsController < ApplicationController
         @album = Album.new(album_params)
         @album.save!
 
+        # Handle artists
         artist_params[:artists].each do |artist|
           ActiveRecord::Base.transaction do
-            @artist = create_or_update(artist) 
+            @artist = create_or_update_artist(artist) 
             @album.artists << @artist
           end
+        end
+
+        # Handle genres
+        if params.has_key?(:genres)
+          genre_params[:genres].each do |genre|
+            ActiveRecord::Base.transaction do
+              @genre = create_or_get_genre(genre) 
+              @album.genres << @genre
+            end
+          end 
         end
 
         render :show, status: :created
@@ -59,6 +70,10 @@ class AlbumsController < ApplicationController
     params.permit(:artists => [:name, :img_url, :spotify_id, :discogs_id])
   end
 
+  def genre_params
+    params.permit(:genres => [:name])
+  end
+
   def artist_ids(artist)
     if (artist['spotify_id'].nil? && artist['discogs_id'].nil?)
       nil
@@ -71,7 +86,7 @@ class AlbumsController < ApplicationController
     end
   end
 
-  def create_or_update(artist_params) 
+  def create_or_update_artist(artist_params) 
     artist_ids = artist_ids(artist_params)
 
     if Artist.exists?(artist_ids)
@@ -81,5 +96,17 @@ class AlbumsController < ApplicationController
     end
 
     Artist.create!(artist_params)
+  end
+
+  def create_or_get_genre(genre_params) 
+    puts "_________________"
+    pp genre_params
+    if Genre.exists?(genre_params)
+      genre = Genre.find_by(genre_params)
+      pp genre
+      return genre
+    end
+
+    Genre.create!(genre_params)
   end
 end
