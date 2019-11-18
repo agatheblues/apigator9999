@@ -14,6 +14,10 @@ FactoryBot.define do
     end
   end
 
+  factory :genre do
+    sequence(:name) { |n| "Genre #{n}" }
+  end
+
   factory :album do
     sequence(:name) { |n| "Album #{n}" }
     sequence(:added_at) { |n| "#{2019 - n}-01-01T00:16:48.000Z"}
@@ -33,6 +37,10 @@ FactoryBot.define do
 
     after(:create) do |album|
       album.artists = create_list(:artist, rand(1..3), albums: [album])
+    end
+
+    after(:create) do |album|
+      album.genres = create_list(:genre, rand(1..3), albums: [album])
     end
   end
 end
