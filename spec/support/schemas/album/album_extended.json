@@ -12,7 +12,8 @@
     "img_width",
     "spotify_id",
     "discogs_id",
-    "artists"
+    "artists",
+    "genres"
   ],
   "properties": {
     "id": {
@@ -43,6 +44,12 @@
       "type": "array",
       "items": {
         "$ref": "file:/artist_without_albums.json#"
+      }
+    },
+    "genres": {
+      "type": "array",
+      "items": {
+        "$ref": "file:/genre.json#"
       }
     }
   },

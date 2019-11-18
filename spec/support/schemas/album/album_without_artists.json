@@ -11,7 +11,8 @@
     "img_height",
     "img_width",
     "spotify_id",
-    "discogs_id"
+    "discogs_id",
+    "genres"
   ],
   "properties": {
     "id": {
@@ -37,6 +38,12 @@
     },
     "img_width": {
       "type": "integer"
+    },
+    "genres": {
+      "type": "array",
+      "items": {
+        "$ref": "file:/genre.json#"
+      }
     }
   },
   "anyOf": [
