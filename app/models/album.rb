@@ -1,6 +1,9 @@
 class Album < ApplicationRecord
   # model association
   has_and_belongs_to_many :artists
+  before_destroy do
+    artists.each { |artist| artist.destroy if artist.albums.length == 1 }
+  end
 
   validates :added_at, presence: true
   validates :name, presence: true
