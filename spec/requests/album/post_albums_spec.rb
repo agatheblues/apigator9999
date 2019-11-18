@@ -4,7 +4,9 @@ describe "POST /albums", :type => :request do
   setup do
     @album = FactoryBot.attributes_for(:album)
     @artists = FactoryBot.attributes_for_list(:artist, 3)
+    @genres = FactoryBot.attributes_for_list(:genre, 3)
     @album['artists'] = @artists
+    @album['genres'] = @genres
   end
 
   context "with valid attributes" do
@@ -18,6 +20,12 @@ describe "POST /albums", :type => :request do
       expect{
         post "/albums", params: @album
       }.to change(Artist, :count).by(3)
+    end
+
+    it "creates new genres" do
+      expect{
+        post "/albums", params: @album
+      }.to change(Genre, :count).by(3)
     end
 
     it 'returns the correct album' do
@@ -55,6 +63,12 @@ describe "POST /albums", :type => :request do
       }.to_not change(Artist, :count)
     end
 
+    it "does not save the genres" do
+      expect{
+        post "/albums", params: @invalid_album
+      }.to_not change(Genre, :count)
+    end
+
     it 'returns status code 400' do
       post "/albums", params: @invalid_album
       expect(response).to have_http_status(:bad_request)
@@ -83,6 +97,12 @@ describe "POST /albums", :type => :request do
       expect{
         post "/albums", params: @invalid_album
       }.to_not change(Artist, :count)
+    end
+
+    it "does not save the genres" do
+      expect{
+        post "/albums", params: @invalid_album
+      }.to_not change(Genre, :count)
     end
 
     it 'returns status code 400' do
@@ -141,13 +161,40 @@ describe "POST /albums", :type => :request do
     it "does not create a new artist" do
       expect{
         post "/albums", params: @album
-      }.to change(Artist, :count).by(0)
+      }.to_not change(Artist, :count)
     end
 
     it "updates exiting artist" do
       post "/albums", params: @album
       @artist.reload
       expect(@artist.name).to eq("Larry")
+    end
+  end 
+
+  context "with an already existing genre" do
+    setup do
+      @genre = FactoryBot.create(:genre)
+      @album = FactoryBot.attributes_for(:album)
+      @artist = FactoryBot.attributes_for(:artist)
+      @album['artists'] = [@artist]
+      @album['genres'] = [@genre.attributes]
+    end
+
+    it "creates a new album" do
+      expect{
+        post "/albums", params: @album
+      }.to change(Album, :count).by(1)
+    end
+    
+    it 'returns status code 201' do
+      post "/albums", params: @album
+      expect(response).to have_http_status(:created)
+    end
+
+    it "does not create a new genre" do
+      expect{
+        post "/albums", params: @album
+      }.to_not change(Genre, :count)
     end
   end 
 
@@ -162,7 +209,7 @@ describe "POST /albums", :type => :request do
     it "does not create a new album" do
       expect{
         post "/albums", params: @same_album
-      }.to change(Album, :count).by(0)
+      }.to_not change(Album, :count)
     end
     
     it 'returns status code 400' do
