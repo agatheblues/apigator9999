@@ -99,12 +99,8 @@ class AlbumsController < ApplicationController
   end
 
   def create_or_get_genre(genre_params) 
-    puts "_________________"
-    pp genre_params
     if Genre.exists?(genre_params)
-      genre = Genre.find_by(genre_params)
-      pp genre
-      return genre
+      return Genre.find_by(genre_params)
     end
 
     Genre.create!(genre_params)
