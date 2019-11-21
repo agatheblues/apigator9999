@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   get 'genres', to: 'genres#index', format: 'json'
 
+  get 'styles', to: 'styles#index', format: 'json'
+
   get 'artists', to: 'artists#index', format: 'json'
   get 'artists/:id', to: 'artists#show', format: 'json', as: :artist
 
