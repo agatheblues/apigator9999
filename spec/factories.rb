@@ -18,6 +18,10 @@ FactoryBot.define do
     sequence(:name) { |n| "Genre #{n}" }
   end
 
+  factory :style do
+    sequence(:name) { |n| "Style #{n}" }
+  end
+
   factory :album do
     sequence(:name) { |n| "Album #{n}" }
     sequence(:added_at) { |n| "#{2019 - n}-01-01T00:16:48.000Z"}

@@ -6,11 +6,14 @@ describe "PATCH /albums/:id updates the album", :type => :request do
       @album = FactoryBot.attributes_for(:album)
       @artists = FactoryBot.attributes_for_list(:artist, 2)
       @genres = FactoryBot.attributes_for_list(:genre, 2)
+      @styles = FactoryBot.attributes_for_list(:style, 2)
       @album['artists'] = @artists
       @album['genres'] = @genres
+      @album['styles'] = @styles
       @update_params = FactoryBot.attributes_for(:album)
       @update_params['artists'] = @artists.dup << FactoryBot.attributes_for(:artist)
       @update_params['genres'] = @genres.dup << FactoryBot.attributes_for(:genre)
+      @update_params['styles'] = @styles.dup << FactoryBot.attributes_for(:style)
     end
 
     before :each do
@@ -57,6 +60,12 @@ describe "PATCH /albums/:id updates the album", :type => :request do
       expect{
         patch "/albums/#{@id}", params: @update_params
       }.to change(Genre, :count).by(1)
+    end
+
+    it 'updated the styles' do
+      expect{
+        patch "/albums/#{@id}", params: @update_params
+      }.to change(Style, :count).by(1)
     end
   end
 

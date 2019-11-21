@@ -36,6 +36,16 @@ class AlbumsController < ApplicationController
           end 
         end
 
+        # Handle styles
+        if params.has_key?(:styles)
+          style_params[:styles].each do |style|
+            ActiveRecord::Base.transaction do
+              @style = create_or_get_style(style) 
+              @album.styles << @style[:style]
+            end
+          end 
+        end
+
         render :show, status: :created
       end
     rescue ActiveRecord::RecordInvalid => exception
@@ -67,6 +77,16 @@ class AlbumsController < ApplicationController
             end
           end 
         end
+
+        # Handle styles
+        if params.has_key?(:styles)
+          style_params[:styles].each do |style|
+            ActiveRecord::Base.transaction do
+              @style = create_or_get_style(style) 
+              @album.styles << @style[:style] if @style[:new]
+            end
+          end 
+        end
       
         render :show, status: :ok
       end
@@ -94,6 +114,10 @@ class AlbumsController < ApplicationController
 
   def genre_params
     params.permit(:genres => [:name])
+  end
+
+  def style_params
+    params.permit(:styles => [:name])
   end
 
   def artist_ids(artist)
@@ -128,5 +152,15 @@ class AlbumsController < ApplicationController
     end
 
     {new: true, genre: Genre.create!(genre_params)}
+  end
+
+  def create_or_get_style(style_params) 
+    name = {name: style_params['name']}
+
+    if Style.exists?(name)
+      return {new: false, style: Style.find_by(name)}
+    end
+
+    {new: true, style: Style.create!(style_params)}
   end
 end

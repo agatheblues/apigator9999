@@ -3,6 +3,8 @@ require 'rails_helper'
 describe Album, :type => :model do  
   context "associations" do
     it { should have_and_belong_to_many(:artists) }
+    it { should have_and_belong_to_many(:genres) }
+    it { should have_and_belong_to_many(:styles) }
   end
 
   context "validations" do

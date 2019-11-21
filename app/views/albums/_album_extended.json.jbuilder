@@ -10,3 +10,4 @@ json.img_height album.img_height
 json.img_width album.img_width
 json.artists album.artists, partial: 'artists/artist_without_albums', as: :artist
 json.genres album.genres, partial: 'genres/genre', as: :genre
+json.styles album.styles, partial: 'styles/style', as: :style

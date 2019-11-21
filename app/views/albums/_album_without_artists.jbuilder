@@ -9,3 +9,4 @@ json.img_url album.img_url
 json.img_height album.img_height
 json.img_width album.img_width
 json.genres album.genres, partial: 'genres/genre', as: :genre
+json.styles album.styles, partial: 'styles/style', as: :style
