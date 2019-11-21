@@ -3,25 +3,39 @@ require 'rails_helper'
 describe "PATCH /albums/:id updates the album", :type => :request do
   context "with valid id" do
     setup do
-      @id = FactoryBot.create(:album).id
+      @album = FactoryBot.attributes_for(:album)
+      @artists = FactoryBot.attributes_for_list(:artist, 2)
+      @genres = FactoryBot.attributes_for_list(:genre, 2)
+      @album['artists'] = @artists
+      @album['genres'] = @genres
       @update_params = FactoryBot.attributes_for(:album)
+      @update_params['artists'] = @artists.dup << FactoryBot.attributes_for(:artist)
+      @update_params['genres'] = @genres.dup << FactoryBot.attributes_for(:genre)
     end
 
-    before {patch "/albums/#{@id}", params: @update_params}
+    before :each do
+      post "/albums", params: @album
+      @id = json['id']
+    end
 
     it 'returns the correct album' do
+      patch "/albums/#{@id}", params: @update_params
       expect(json['id']).to eq(@id)
     end
 
     it 'returns status code 200' do
+      patch "/albums/#{@id}", params: @update_params
       expect(response).to have_http_status(:ok)
     end
 
     it 'has the correct schema' do
+      patch "/albums/#{@id}", params: @update_params
       expect(response).to match_json_schema("album/album_extended")
     end
 
     it 'updated the album' do
+      patch "/albums/#{@id}", params: @update_params
+      json = JSON.parse(response.body)
       expect(json['name']).to eq(@update_params[:name])
       expect(json['added_at']).to eq(@update_params[:added_at])
       expect(json['release_date']).to eq(@update_params[:release_date])
@@ -31,6 +45,18 @@ describe "PATCH /albums/:id updates the album", :type => :request do
       expect(json['img_height']).to eq(@update_params[:img_height])
       expect(json['spotify_id']).to eq(@update_params[:spotify_id])
       expect(json['discogs_id']).to eq(@update_params[:discogs_id])
+    end
+
+    it 'updated the artists' do
+      expect{
+        patch "/albums/#{@id}", params: @update_params
+      }.to change(Artist, :count).by(1)
+    end
+
+    it 'updated the genres' do
+      expect{
+        patch "/albums/#{@id}", params: @update_params
+      }.to change(Genre, :count).by(1)
     end
   end
 

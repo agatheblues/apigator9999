@@ -22,7 +22,7 @@ class AlbumsController < ApplicationController
         artist_params[:artists].each do |artist|
           ActiveRecord::Base.transaction do
             @artist = create_or_update_artist(artist) 
-            @album.artists << @artist
+            @album.artists << @artist[:artist]
           end
         end
 
@@ -31,7 +31,7 @@ class AlbumsController < ApplicationController
           genre_params[:genres].each do |genre|
             ActiveRecord::Base.transaction do
               @genre = create_or_get_genre(genre) 
-              @album.genres << @genre
+              @album.genres << @genre[:genre]
             end
           end 
         end
@@ -44,10 +44,32 @@ class AlbumsController < ApplicationController
   end
 
   def update
-    if @album.update(album_params)
-      render :show, status: :ok
-    else
-      render json: {status: "error", code: 4000, message: "Could not update album"}, status: :bad_request
+    begin
+      ActiveRecord::Base.transaction do
+        @album.update(album_params)
+
+        # Handle artists
+        if params.has_key?(:artists)
+          artist_params[:artists].each do |artist|
+            ActiveRecord::Base.transaction do
+              @artist = create_or_update_artist(artist) 
+              @album.artists << @artist[:artist] if @artist[:new]
+            end
+          end
+        end
+
+        # Handle genres
+        if params.has_key?(:genres)
+          genre_params[:genres].each do |genre|
+            ActiveRecord::Base.transaction do
+              @genre = create_or_get_genre(genre) 
+              @album.genres << @genre[:genre] if @genre[:new]
+            end
+          end 
+        end
+      
+        render :show, status: :ok
+      end
     end
   end
   
@@ -92,18 +114,19 @@ class AlbumsController < ApplicationController
     if Artist.exists?(artist_ids)
       artist = Artist.find_by(artist_ids)
       artist.update(artist_params)
-      return artist
+      return {new: false, artist: artist}
     end
 
-    Artist.create!(artist_params)
+    {new: true, artist: Artist.create!(artist_params)}
   end
 
   def create_or_get_genre(genre_params) 
     name = {name: genre_params['name']}
+
     if Genre.exists?(name)
-      return Genre.find_by(name)
+      return {new: false, genre: Genre.find_by(name)}
     end
 
-    Genre.create!(genre_params)
+    {new: true, genre: Genre.create!(genre_params)}
   end
 end
