@@ -1,0 +1,54 @@
+{
+  "id": "file:/artist_without_albums.json#",
+  "type": "object",
+  "required": [
+    "id",
+    "name",
+    "img_url",
+    "spotify_id",
+    "discogs_id"
+  ],
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "name": {
+      "type": "string"
+    },
+    "img_url": {
+      "type": "string"
+    }
+  },
+  "anyOf": [
+    {
+      "properties": {
+        "spotify_id": {
+          "type": "string"
+        },
+        "discogs_id": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "properties": {
+        "spotify_id": {
+          "type": "string"
+        },
+        "discogs_id": {
+          "type": "null"
+        }
+      }
+    },
+    {
+      "properties": {
+        "spotify_id": {
+          "type": "null"
+        },
+        "discogs_id": {
+          "type": "string"
+        }
+      }
+    }
+  ]
+}

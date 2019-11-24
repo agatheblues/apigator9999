@@ -1,0 +1,8 @@
+{
+  "id": "file:/albums.json#",
+  "description": "A collection of albums",
+  "type": "array",
+  "items": {
+    "$ref": "file:/album_short.json#"
+  }
+}

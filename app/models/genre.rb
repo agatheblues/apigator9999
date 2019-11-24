@@ -1,7 +1,6 @@
 class Genre < ApplicationRecord
-  # model associations
+  # model association
   has_and_belongs_to_many :albums
-  
-  # Validations
-  validates_presence_of  :name, :type
+
+  validates :name, presence: true
 end

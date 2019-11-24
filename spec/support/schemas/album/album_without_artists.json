@@ -1,0 +1,81 @@
+{
+  "id": "file:/album_without_artists.json#",
+  "type": "object",
+  "required": [
+    "id",
+    "name",
+    "added_at",
+    "release_date",
+    "total_tracks",
+    "img_url",
+    "img_height",
+    "img_width",
+    "spotify_id",
+    "discogs_id",
+    "genres"
+  ],
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "name": {
+      "type": "string"
+    },
+    "added_at": {
+      "type": "string"
+    },
+    "release_date": {
+      "type": "string"
+    },
+    "total_tracks": {
+      "type": "integer"
+    },
+    "img_url": {
+      "type": "string"
+    },
+    "img_height": {
+      "type": "integer"
+    },
+    "img_width": {
+      "type": "integer"
+    },
+    "genres": {
+      "type": "array",
+      "items": {
+        "$ref": "file:/genre.json#"
+      }
+    }
+  },
+  "anyOf": [
+    {
+      "properties": {
+        "spotify_id": {
+          "type": "string"
+        },
+        "discogs_id": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "properties": {
+        "spotify_id": {
+          "type": "string"
+        },
+        "discogs_id": {
+          "type": "null"
+        }
+      }
+    },
+    {
+      "properties": {
+        "spotify_id": {
+          "type": "null"
+        },
+        "discogs_id": {
+          "type": "string"
+        }
+      }
+    }
+  ]
+}

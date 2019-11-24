@@ -1,5 +1,0 @@
-* Might want to explore has_many :through  for album_source and artist_source
-* Discuss the real value of Faker
-* Valid attributes in tests use do; end syntax for multiline
-* Refactor process for requests specs
-* Discuss controller vs requests

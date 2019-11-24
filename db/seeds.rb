@@ -1,39 +1,57 @@
-DatabaseCleaner.clean_with :truncation
+# This file should contain all the record creation needed to seed the database with its default values.
+# The data can then be loaded with the rails db:seed command (or created alongside the database with db:setup).
+#
+# Examples:
+#
+#   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
+#   Character.create(name: 'Luke', movie: movies.first)
 
-artist_0 = Artist.create({
-  name: 'artist_0', 
-  img_url: 'http://placekitten.com/300/300',
-  discogs_id: '253966',
-})
-
-artist_1 = Artist.create({
-  name: 'artist_1', 
-  img_url: 'http://placekitten.com/300/300',
-  spotify_id: '7oqXnxR9Xg9Okhs17asfwe8S',
-})
-
-albums = Album.create([
+artists = Artist.create([
   {
-    name: 'album_0',
-    added_at: 'Feb, 25 2015',
-    release_date: 'June 2018',
-    total_tracks: 7,
-    height: 200,
-    width: 200,
-    img_url: 'http://placekitten.com/400/400',
-    discogs_id: '1443345',
-    artists: [ artist_0 ]
+    name: "Steely Dan",
+    img_url: "https://placekitten.com/200/300",
+    spotify_id: "art_spot_0"
   },
   {
-    name: 'album_1',
-    added_at: 'May, 25 2015',
-    release_date: 'June 2018',
-    total_tracks: 10,
-    height: 200,
-    width: 200,
-    img_url: 'http://placekitten.com/400/400',
-    discogs_id: '987762',
-    spotify_id: '2H5yYiN7sNAsxoZIg83yiD',
-    artists: [ artist_0, artist_1 ]
+    name: "Radiohead",
+    img_url: "https://placekitten.com/200/300",
+    discogs_id: "art_disc_0",
+  }
+])
+
+Album.create([
+  {
+    added_at: "2018-01-01",
+    name: "Aja",
+    release_date: "1979",
+    spotify_id: "spot_0",
+    total_tracks: 12,
+    img_url: "https://placekitten.com/200/300",
+    img_height: 300,
+    img_width: 200,
+    artists: [artists[0]]
+  },
+  {
+    added_at: "2017-04-01",
+    name: "Ok Computer",
+    release_date: "2001",
+    discogs_id: "disc_0",
+    total_tracks: 22,
+    img_url: "https://placekitten.com/200/300",
+    img_height: 300,
+    img_width: 200,
+    artists: [artists[1]]
+  },
+  {
+    added_at: "2015-04-01",
+    name: "Absolution",
+    release_date: "1992",
+    discogs_id: "disc_1",
+    spotify_id: "spot_1",
+    total_tracks: 14,
+    img_url: "https://placekitten.com/200/300",
+    img_height: 300,
+    img_width: 200,
+    artists: [artists[0], artists[1]]
   }
 ])

@@ -1,0 +1,8 @@
+{
+  "id": "file:/styles.json#",
+  "description": "A collection of styles",
+  "type": "array",
+  "items": {
+    "$ref": "file:/style.json#"
+  }
+}

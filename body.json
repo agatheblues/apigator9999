@@ -1,0 +1,17 @@
+{
+  "release_date": "2018",
+  "name": "Aromanticism",
+  "total_tracks": 11,
+  "spotify_id": "12345",
+  "img_url": "https://i.scdn.co/image/4c178f90759447d5f5ae7a70b024c7c4710e673a",
+  "img_width": 640,
+  "img_height": 640,
+  "added_at": "2017-10-16T10:18:33Z",
+  "artists_attributes": [
+    {
+      "name": "Moses Sumney",
+      "img_url": "https://i.scdn.co/image/b932e75a88b7315ed5b48a6c18234e4a2e1e81f9",
+      "spotify_id": "30WjNaR79shSTGB52IJTw0"
+    }
+  ]
+}

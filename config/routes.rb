@@ -1,15 +1,10 @@
 Rails.application.routes.draw do
-  # ARTISTS
-  get '/artists', to: 'artists#index'
-  post '/artists', to: 'artists#create'
-  get '/artists/:id', to: 'artists#show'
-  put '/artists/:id', to: 'artists#update'
-  delete '/artists/:id', to: 'artists#destroy'
+  get 'genres', to: 'genres#index', format: 'json'
 
-  # ALBUMS
-  get '/albums', to: 'albums#index'
-  post '/albums', to: 'albums#create'
-  get '/albums/:id', to: 'albums#show'
-  put '/albums/:id', to: 'albums#update'
-  delete '/albums/:id', to: 'albums#destroy'
+  get 'styles', to: 'styles#index', format: 'json'
+
+  get 'artists', to: 'artists#index', format: 'json'
+  get 'artists/:id', to: 'artists#show', format: 'json', as: :artist
+
+  resources :albums, format: 'json'
 end

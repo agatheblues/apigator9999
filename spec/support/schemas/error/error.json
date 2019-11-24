@@ -1,0 +1,25 @@
+{
+  "id": "file:/error.json#",
+  "type": "object",
+  "required": [
+    "status",
+    "message"
+  ],
+  "properties": {
+    "status": {
+      "type": [
+        "string",
+        "integer"
+      ]
+    },
+    "code": {
+      "type": "integer"
+    },
+    "error": {
+      "type": "string"
+    },
+    "message": {
+      "type": "string"
+    }
+  }
+}
