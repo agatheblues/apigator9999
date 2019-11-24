@@ -1,1 +1,1 @@
-json.array! @albums, partial: 'albums/album_short', as: :album
+json.array! @albums, partial: 'albums/album_extended', as: :album

@@ -5,6 +5,8 @@
     "id",
     "name",
     "img_url",
+    "total_tracks",
+    "total_albums",
     "spotify_id",
     "discogs_id"
   ],
@@ -17,6 +19,12 @@
     },
     "img_url": {
       "type": "string"
+    },
+    "total_tracks": {
+      "type": "integer"
+    },
+    "total_albums": {
+      "type": "integer"
     }
   },
   "anyOf": [

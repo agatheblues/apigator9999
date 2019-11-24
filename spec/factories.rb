@@ -12,6 +12,8 @@ FactoryBot.define do
         rand() > 0.5 ? "discogs_#{n}" : nil 
       end
     end
+    total_tracks { rand(5..10) }
+    total_albums { rand(5..10) }
   end
 
   factory :genre do

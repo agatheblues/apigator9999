@@ -109,7 +109,7 @@ class AlbumsController < ApplicationController
   end
 
   def artist_params
-    params.permit(:artists => [:name, :img_url, :spotify_id, :discogs_id])
+    params.permit(:artists => [:name, :img_url, :spotify_id, :discogs_id, :total_tracks, :total_albums])
   end
 
   def genre_params

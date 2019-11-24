@@ -4,7 +4,9 @@
   "required": [
     "id",
     "name",
-    "img_url"
+    "img_url",
+    "total_tracks",
+    "total_albums"
   ],
   "properties": {
     "id": {
@@ -15,6 +17,12 @@
     },
     "img_url": {
       "type": "string"
+    },
+    "total_tracks": {
+      "type": "integer"
+    },
+    "total_albums": {
+      "type": "integer"
     }
   }
 }
