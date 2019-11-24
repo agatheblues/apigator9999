@@ -46,5 +46,9 @@ FactoryBot.define do
     after(:create) do |album|
       album.genres = create_list(:genre, rand(1..3), albums: [album])
     end
+
+    after(:create) do |album|
+      album.styles = create_list(:style, rand(1..3), albums: [album])
+    end
   end
 end

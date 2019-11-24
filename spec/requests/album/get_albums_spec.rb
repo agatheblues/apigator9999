@@ -1,22 +1,106 @@
 require 'rails_helper'
 
 describe "GET /albums gets all albums", :type => :request do
-  setup do 
-    @albums = FactoryBot.create_list(:album, 10)
+  context 'when no filters are applied' do
+    setup do 
+      @albums = FactoryBot.create_list(:album, 10)
+    end
+
+    before {get '/albums'}
+
+    it 'returns all albums' do
+      expect(json.size).to eq(10)
+    end
+
+    it 'returns status code 200' do
+      expect(response).to have_http_status(:success)
+    end
+
+    it 'has the correct schema' do
+      expect(response).to match_json_schema("album/albums")
+    end
   end
 
-  before {get '/albums'}
+  context 'when a single genre filter is applied' do
+    setup do 
+      @albums = FactoryBot.create_list(:album, 10)
+      @genre_id = @albums[0].genres[0].id
+    end
 
-  it 'returns all albums' do
-    expect(json.size).to eq(10)
+    before {get "/albums?genres=#{@genre_id}"}
+
+    it 'returns a filtered list' do
+      expect(json.size).to eq(1)
+    end
+
+    it 'returns the correct album' do
+      genre_ids = json[0]['genres'].map {|genre| genre['id']}
+      expect(genre_ids.include?(@genre_id)).to be true
+    end
+
+    it 'returns status code 200' do
+      expect(response).to have_http_status(:success)
+    end
+
+    it 'has the correct schema' do
+      expect(response).to match_json_schema("album/albums")
+    end
   end
 
-  it 'returns status code 200' do
-    expect(response).to have_http_status(:success)
+  context 'when multiple genre filter are applied' do
+    setup do 
+      @albums = FactoryBot.create_list(:album, 10)
+      @genre_1 = @albums[0].genres[0].id
+      @genre_2 = @albums[1].genres[0].id
+    end
+
+    before {get "/albums?genres=#{@genre_1},#{@genre_2}"}
+
+    it 'returns a filtered list' do
+      expect(json.size).to eq(2)
+    end
+
+    it 'returns the correct albums' do
+      genre_ids_1 = json[0]['genres'].map {|genre| genre['id']}
+      genre_ids_2 = json[1]['genres'].map {|genre| genre['id']}
+      genre_ids = genre_ids_1.concat(genre_ids_2)
+      expect(genre_ids.include?(@genre_1)).to be true
+      expect(genre_ids.include?(@genre_2)).to be true
+    end
+
+    it 'returns status code 200' do
+      expect(response).to have_http_status(:success)
+    end
+
+    it 'has the correct schema' do
+      expect(response).to match_json_schema("album/albums")
+    end
   end
 
-  it 'has the correct schema' do
-    expect(response).to match_json_schema("album/albums")
+  context 'when a single style filter is applied' do
+    setup do 
+      @albums = FactoryBot.create_list(:album, 10)
+      @style_id = @albums[0].styles[0].id
+    end
+
+    before {get "/albums?styles=#{@style_id}"}
+
+    it 'returns a filtered list' do
+      expect(json.size).to eq(1)
+    end
+
+    it 'returns the correct album' do
+      style_ids = json[0]['styles'].map {|style| style['id']}
+      expect(style_ids.include?(@style_id)).to be true
+    end
+
+    it 'returns status code 200' do
+      expect(response).to have_http_status(:success)
+    end
+
+    it 'has the correct schema' do
+      expect(response).to match_json_schema("album/albums")
+    end
   end
 end
 
