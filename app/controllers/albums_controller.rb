@@ -21,7 +21,7 @@ class AlbumsController < ApplicationController
         # Handle artists
         artist_params[:artists].each do |artist|
           ActiveRecord::Base.transaction do
-            @artist = create_or_update_artist(artist) 
+            @artist = create_or_update_artist(artist, album_params['total_tracks'].to_i) 
             @album.artists << @artist[:artist]
           end
         end
@@ -62,7 +62,7 @@ class AlbumsController < ApplicationController
         if params.has_key?(:artists)
           artist_params[:artists].each do |artist|
             ActiveRecord::Base.transaction do
-              @artist = create_or_update_artist(artist) 
+              @artist = create_or_update_artist(artist, album_params['total_tracks'].to_i) 
               @album.artists << @artist[:artist] if @artist[:new]
             end
           end
@@ -132,15 +132,19 @@ class AlbumsController < ApplicationController
     end
   end
 
-  def create_or_update_artist(artist_params) 
+  def create_or_update_artist(artist_params, total_tracks) 
     artist_ids = artist_ids(artist_params)
 
     if Artist.exists?(artist_ids)
       artist = Artist.find_by(artist_ids)
+      artist_params['total_albums'] = artist['total_albums'] + 1
+      artist_params['total_tracks'] = artist['total_tracks'] + total_tracks
       artist.update(artist_params)
       return {new: false, artist: artist}
     end
 
+    artist_params['total_albums'] = 1
+    artist_params['total_tracks'] = total_tracks
     {new: true, artist: Artist.create!(artist_params)}
   end
 

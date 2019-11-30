@@ -12,8 +12,8 @@ FactoryBot.define do
         rand() > 0.5 ? "discogs_#{n}" : nil 
       end
     end
-    total_tracks { rand(5..10) }
-    total_albums { rand(5..10) }
+    total_tracks { 0 }
+    total_albums { 0 }
   end
 
   factory :genre do
@@ -28,7 +28,7 @@ FactoryBot.define do
     sequence(:name) { |n| "Album #{n}" }
     sequence(:added_at) { |n| "#{2019 - n}-01-01T00:16:48.000Z"}
     sequence(:release_date) { |n| "#{2016 - n}-01-01"}
-    sequence(:total_tracks) { |n| n}
+    sequence(:total_tracks) { 12 }
     img_url {"https://placekitten.com/200/300"}
     img_width {200}
     img_height {300}

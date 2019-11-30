@@ -53,8 +53,8 @@ ActiveRecord::Schema.define(version: 2019_11_24_164838) do
     t.string "discogs_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "total_tracks"
-    t.integer "total_albums"
+    t.integer "total_tracks", default: 0
+    t.integer "total_albums", default: 0
     t.index ["discogs_id"], name: "index_artists_on_discogs_id", unique: true
     t.index ["spotify_id"], name: "index_artists_on_spotify_id", unique: true
   end

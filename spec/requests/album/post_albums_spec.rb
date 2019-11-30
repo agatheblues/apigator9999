@@ -40,6 +40,13 @@ describe "POST /albums", :type => :request do
       post "/albums", params: @album
       expect(json['name']).to eq(@album[:name])
     end
+
+    it 'computes artists total tracks and albums' do
+      post "/albums", params: @album
+      first_artist = json['artists'][0]
+      expect(first_artist['total_tracks']).to eq(12)
+      expect(first_artist['total_albums']).to eq(1)
+    end
   
     it 'returns status code 201' do
       post "/albums", params: @album
@@ -168,7 +175,7 @@ describe "POST /albums", :type => :request do
 
   context "with an already existing artist" do
     setup do
-      @artist = FactoryBot.create(:artist)
+      @artist = FactoryBot.create(:artist, total_albums: 1, total_tracks: 12)
       artist_attributes = @artist.attributes
       artist_attributes['name'] = "Larry"
       @album = FactoryBot.attributes_for(:album)
@@ -190,6 +197,13 @@ describe "POST /albums", :type => :request do
       expect{
         post "/albums", params: @album
       }.to_not change(Artist, :count)
+    end
+
+    it 'updates artist total tracks and albums' do
+      post "/albums", params: @album
+      first_artist = json['artists'][0]
+      expect(first_artist['total_tracks']).to eq(24)
+      expect(first_artist['total_albums']).to eq(2)
     end
 
     it "updates exiting artist" do
