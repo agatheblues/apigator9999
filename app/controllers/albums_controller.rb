@@ -1,4 +1,6 @@
 class AlbumsController < ApplicationController
+  include FilterAlbums
+  include CreateAlbumsAssociations
   before_action :set_album, only: [:show, :update, :destroy]
 
   def index
@@ -17,14 +19,8 @@ class AlbumsController < ApplicationController
       ActiveRecord::Base.transaction do
         @album = Album.new(album_params)
         @album.save!
-
-        # Handle artists
-        artist_params[:artists].each do |artist|
-          ActiveRecord::Base.transaction do
-            @artist = create_or_update_artist(artist, album_params['total_tracks'].to_i) 
-            @album.artists << @artist[:artist]
-          end
-        end
+        
+        handle_artists(artist_params['artists'], album_params['total_tracks'].to_i, false)
 
         # Handle genres
         if params.has_key?(:genres)
@@ -58,15 +54,7 @@ class AlbumsController < ApplicationController
       ActiveRecord::Base.transaction do
         @album.update(album_params)
 
-        # Handle artists
-        if params.has_key?(:artists)
-          artist_params[:artists].each do |artist|
-            ActiveRecord::Base.transaction do
-              @artist = create_or_update_artist(artist, album_params['total_tracks'].to_i) 
-              @album.artists << @artist[:artist] if @artist[:new]
-            end
-          end
-        end
+        handle_artists(artist_params['artists'], album_params['total_tracks'].to_i, true) if params.has_key?(:artists)
 
         # Handle genres
         if params.has_key?(:genres)
@@ -118,77 +106,5 @@ class AlbumsController < ApplicationController
 
   def style_params
     params.permit(:styles => [:name])
-  end
-
-  def artist_ids(artist)
-    if (artist['spotify_id'].nil? && artist['discogs_id'].nil?)
-      nil
-    elsif (artist['spotify_id'].nil?)
-      {discogs_id: artist['discogs_id']}
-    elsif (artist['discogs_id'].nil?)
-      {spotify_id: artist['spotify_id']}
-    else
-      {spotify_id: artist['spotify_id'], discogs_id: artist['discogs_id']}
-    end
-  end
-
-  def create_or_update_artist(artist_params, total_tracks) 
-    artist_ids = artist_ids(artist_params)
-
-    if Artist.exists?(artist_ids)
-      artist = Artist.find_by(artist_ids)
-      artist_params['total_albums'] = artist['total_albums'] + 1
-      artist_params['total_tracks'] = artist['total_tracks'] + total_tracks
-      artist.update(artist_params)
-      return {new: false, artist: artist}
-    end
-
-    artist_params['total_albums'] = 1
-    artist_params['total_tracks'] = total_tracks
-    {new: true, artist: Artist.create!(artist_params)}
-  end
-
-  def create_or_get_genre(genre_params) 
-    name = {name: genre_params['name']}
-
-    if Genre.exists?(name)
-      return {new: false, genre: Genre.find_by(name)}
-    end
-
-    {new: true, genre: Genre.create!(genre_params)}
-  end
-
-  def create_or_get_style(style_params) 
-    name = {name: style_params['name']}
-
-    if Style.exists?(name)
-      return {new: false, style: Style.find_by(name)}
-    end
-
-    {new: true, style: Style.create!(style_params)}
-  end
-
-  def format_params(params, name, formatter)
-    formatter.call(params[name].split(","))
-  end
-
-  def has_param(params, key)
-    params.has_key?(key) && !params[key].nil?
-  end
-
-  def filter_params
-    filter_params = {}
-    filter_params['genres'] = format_params(params, 'genres', Proc.new {|list| {:id => list}}) if has_param(params, :genres)
-    filter_params['styles'] = format_params(params, 'styles', Proc.new {|list| {:id => list}}) if has_param(params, :styles)
-    filter_params
-  end
-
-  def filter(relation)
-    return relation if filter_params.empty?
-    
-    relation = relation.joins(:genres) if filter_params.has_key?('genres')
-    relation = relation.joins(:styles) if filter_params.has_key?('styles')
-
-    relation.where(filter_params).distinct
   end
 end
