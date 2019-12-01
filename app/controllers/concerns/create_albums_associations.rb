@@ -7,37 +7,20 @@ module CreateAlbumsAssociations
     end
   end
 
-  def create_or_update_artist(params, total_tracks, only_new) 
-    existing_artist = Artist.find_by(artist_ids(params))
-
-    if !existing_artist.nil?
-      params = add_totals(params, existing_artist['total_tracks'], existing_artist['total_albums'], total_tracks)
-      existing_artist.update(params)
-      @album.artists << existing_artist unless only_new
-    else
-      params = add_totals(params, 0, 0, total_tracks)
-      @album.artists << Artist.create!(params)
-    end
+  def handle_genres(genres, only_new)
+    genres.each do |genre|
+      ActiveRecord::Base.transaction do
+        create_or_set_genre(genre, only_new) 
+      end
+    end 
   end
 
-  def create_or_get_genre(genre_params) 
-    name = {name: genre_params['name']}
-
-    if Genre.exists?(name)
-      return {new: false, genre: Genre.find_by(name)}
-    end
-
-    {new: true, genre: Genre.create!(genre_params)}
-  end
-
-  def create_or_get_style(style_params) 
-    name = {name: style_params['name']}
-
-    if Style.exists?(name)
-      return {new: false, style: Style.find_by(name)}
-    end
-
-    {new: true, style: Style.create!(style_params)}
+  def handle_styles(styles, only_new)
+    styles.each do |style|
+      ActiveRecord::Base.transaction do
+        create_or_set_style(style, only_new) 
+      end
+    end 
   end
 
   private
@@ -59,5 +42,37 @@ module CreateAlbumsAssociations
       {spotify_id: artist['spotify_id'], discogs_id: artist['discogs_id']}
     end
   end
+  
+  def create_or_update_artist(params, total_tracks, only_new) 
+    existing_artist = Artist.find_by(artist_ids(params))
 
+    if !existing_artist.nil?
+      params = add_totals(params, existing_artist['total_tracks'], existing_artist['total_albums'], total_tracks)
+      existing_artist.update(params)
+      @album.artists << existing_artist unless only_new
+    else
+      params = add_totals(params, 0, 0, total_tracks)
+      @album.artists << Artist.create!(params)
+    end
+  end
+
+  def create_or_set_genre(params, only_new) 
+    existing_genre = Genre.find_by({name: params['name']})
+
+    if !existing_genre.nil?
+      @album.genres << existing_genre unless only_new
+    else
+      @album.genres << Genre.create!(params)
+    end
+  end
+  
+  def create_or_set_style(params, only_new) 
+    existing_style = Style.find_by({name: params['name']})
+
+    if !existing_style.nil?
+      @album.styles << existing_style unless only_new
+    else
+      @album.styles << Style.create!(params)
+    end
+  end
 end

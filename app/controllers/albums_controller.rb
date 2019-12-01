@@ -1,6 +1,7 @@
 class AlbumsController < ApplicationController
   include FilterAlbums
   include CreateAlbumsAssociations
+  
   before_action :set_album, only: [:show, :update, :destroy]
 
   def index
@@ -21,26 +22,8 @@ class AlbumsController < ApplicationController
         @album.save!
         
         handle_artists(artist_params['artists'], album_params['total_tracks'].to_i, false)
-
-        # Handle genres
-        if params.has_key?(:genres)
-          genre_params[:genres].each do |genre|
-            ActiveRecord::Base.transaction do
-              @genre = create_or_get_genre(genre) 
-              @album.genres << @genre[:genre]
-            end
-          end 
-        end
-
-        # Handle styles
-        if params.has_key?(:styles)
-          style_params[:styles].each do |style|
-            ActiveRecord::Base.transaction do
-              @style = create_or_get_style(style) 
-              @album.styles << @style[:style]
-            end
-          end 
-        end
+        handle_genres(genre_params['genres'], false) if params.has_key?(:genres)
+        handle_styles(style_params['styles'], false) if params.has_key?(:styles)
 
         render :show, status: :created
       end
@@ -55,26 +38,8 @@ class AlbumsController < ApplicationController
         @album.update(album_params)
 
         handle_artists(artist_params['artists'], album_params['total_tracks'].to_i, true) if params.has_key?(:artists)
-
-        # Handle genres
-        if params.has_key?(:genres)
-          genre_params[:genres].each do |genre|
-            ActiveRecord::Base.transaction do
-              @genre = create_or_get_genre(genre) 
-              @album.genres << @genre[:genre] if @genre[:new]
-            end
-          end 
-        end
-
-        # Handle styles
-        if params.has_key?(:styles)
-          style_params[:styles].each do |style|
-            ActiveRecord::Base.transaction do
-              @style = create_or_get_style(style) 
-              @album.styles << @style[:style] if @style[:new]
-            end
-          end 
-        end
+        handle_genres(genre_params['genres'], true) if params.has_key?(:genres)
+        handle_styles(style_params['styles'], true) if params.has_key?(:styles)
       
         render :show, status: :ok
       end
