@@ -1,0 +1,8 @@
+{
+  "artists_url": "/artists",
+  "artist_url": "/artists/{id}",
+  "albums_url": "/albums",
+  "album_url": "/albums/{id}",
+  "genres_url": "/genres",
+  "styles_url": "/styles"
+}

@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  root to: "home#index", format: 'json'
+
   get 'genres', to: 'genres#index', format: 'json'
 
   get 'styles', to: 'styles#index', format: 'json'
