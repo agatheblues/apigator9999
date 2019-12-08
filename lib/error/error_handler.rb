@@ -20,11 +20,4 @@ module Error
       render_error_response(409, :conflict, 'This entity already exists')
     end
   end
-
-  # def render_error_response(exception)
-  #   render json: { 
-  #     message: exception.message, 
-  #     code: exception.code 
-  #   }, status: exception.http_status
-  # end
 end
