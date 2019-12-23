@@ -53,4 +53,11 @@ FactoryBot.define do
       album.styles = create_list(:style, rand(1..3), albums: [album])
     end
   end
+
+  factory :user do
+    sequence(:email) { |n| "user-#{n}@test.com"}
+    sequence(:username) { |n| "username #{n}"}
+    sequence(:password) { |n| "password#{n}"}
+    role { "user" }
+  end
 end
