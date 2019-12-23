@@ -1,40 +1,63 @@
 require 'rails_helper'
 
 describe "GET /artists gets all artist", :type => :request do
-  let!(:artists) { 
-    list = FactoryBot.create_list(:album, 10)
-    artists = list.map { |album| album.artists}
-    artists.flatten
-  }
+  context 'when authenticated' do
+    let!(:artists) { 
+      list = FactoryBot.create_list(:album, 10)
+      artists = list.map { |album| album.artists}
+      artists.flatten
+    }
 
-  before {get '/artists'}
+    before {get '/artists', headers: authenticated_header}
 
-  it 'returns all artists' do
-    expect(json.size).to eq(artists.length)
+    it 'returns all artists' do
+      expect(json.size).to eq(artists.length)
+    end
+
+    it 'returns status code 200' do
+      expect(response).to have_http_status(:success)
+    end
+
+    it 'has the correct schema' do
+      expect(response).to match_json_schema("artist/artists")
+    end
   end
 
-  it 'returns status code 200' do
-    expect(response).to have_http_status(:success)
-  end
+  context 'when unauthenticated' do
+    before {get '/artists'}
 
-  it 'has the correct schema' do
-    expect(response).to match_json_schema("artist/artists")
+    it 'returns unauthorized' do
+      expect(response).to have_http_status(:unauthorized)
+      expect(response.body).to be_empty
+    end
   end
 end
 
 describe "GET /artists/:id gets the artist", :type => :request do
   let!(:id) { FactoryBot.create(:album).artists[0].id }
-  before {get "/artists/#{id}"}
+  
+  context 'when authenticated' do
+    before {get "/artists/#{id}", headers: authenticated_header}
 
-  it 'returns the correct artist' do
-    expect(json['id']).to eq(id)
+    it 'returns the correct artist' do
+      expect(json['id']).to eq(id)
+    end
+
+    it 'returns status code 200' do
+      expect(response).to have_http_status(:success)
+    end
+
+    it 'has the correct schema' do
+      expect(response).to match_json_schema("artist/artist")
+    end
   end
 
-  it 'returns status code 200' do
-    expect(response).to have_http_status(:success)
-  end
+  context 'when unauthenticated' do
+    before {get "/artists/#{id}"}
 
-  it 'has the correct schema' do
-    expect(response).to match_json_schema("artist/artist")
+    it 'returns unauthorized' do
+      expect(response).to have_http_status(:unauthorized)
+      expect(response.body).to be_empty
+    end
   end
 end
