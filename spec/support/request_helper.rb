@@ -7,9 +7,12 @@ module Requests
 
   module AuthHelpers
     def authenticated_header
-      user = FactoryBot.create(:user)
-      token = Knock::AuthToken.new(payload: { sub: user.id }).token
+      token = Knock::AuthToken.new(payload: { sub: current_user.id }).token
       { 'Authorization': "Bearer #{token}" }
+    end
+
+    def current_user
+      @user ||= FactoryBot.create(:user)
     end
   end
 end

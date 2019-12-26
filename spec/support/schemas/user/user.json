@@ -1,0 +1,20 @@
+{
+  "id": "file:/user.json#",
+  "type": "object",
+  "required": [
+    "email",
+    "username",
+    "role"
+  ],
+  "properties": {
+    "email": {
+      "type": "string"
+    },
+    "username": {
+      "type": "string"
+    },
+    "role": {
+      "type": "string"
+    }
+  }
+}

@@ -4,9 +4,9 @@ Rails.application.routes.draw do
   # Users
   get '/users', to: 'users#index', format: 'json'
   get '/users/current', to: 'users#current', format: 'json'
-  post '/users/create', to: 'users#create', format: 'json'
-  patch '/user/:id', to: 'users#update', format: 'json'
-  delete '/user/:id', to: 'users#destroy', format: 'json'
+  post '/users', to: 'users#create', format: 'json'
+  patch '/users/:id', to: 'users#update', format: 'json'
+  delete '/users/:id', to: 'users#destroy', format: 'json'
 
   # Get login token from Knock
   post 'user_token', to: 'user_token#create'
