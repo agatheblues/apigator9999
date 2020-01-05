@@ -18,10 +18,12 @@ FactoryBot.define do
 
   factory :genre do
     sequence(:name) { |n| "Genre #{n}" }
+    total_albums { 0 }
   end
 
   factory :style do
     sequence(:name) { |n| "Style #{n}" }
+    total_albums { 0 }
   end
 
   factory :album do
