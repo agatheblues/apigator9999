@@ -11,7 +11,8 @@ describe "GET /genres gets all genres", :type => :request do
     before {get '/genres', headers: authenticated_header}
 
     it 'returns all genres' do
-      expect(json.size).to eq(genres.length)
+      expect(json['genres'].size).to eq(genres.length)
+      expect(json['total_genres']).to eq(genres.length)
     end
 
     it 'returns status code 200' do

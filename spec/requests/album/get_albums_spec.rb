@@ -5,12 +5,15 @@ describe "GET /albums gets all albums", :type => :request do
     context 'when no filters are applied' do
       setup do 
         @albums = FactoryBot.create_list(:album, 10)
+        @total_artists = @albums.map { |album| album.artists }.flatten.uniq { |artist| artist.id }.size
       end
 
       before {get '/albums', headers: authenticated_header}
 
       it 'returns all albums' do
-        expect(json.size).to eq(10)
+        expect(json['albums'].size).to eq(10)
+        expect(json['total_albums']).to eq(10)
+        expect(json['total_artists']).to eq(@total_artists)
       end
 
       it 'returns status code 200' do
@@ -26,16 +29,19 @@ describe "GET /albums gets all albums", :type => :request do
       setup do 
         @albums = FactoryBot.create_list(:album, 10)
         @genre_id = @albums[0].genres[0].id
+        @total_artists = @albums[0].artists.size
       end
 
       before {get "/albums?genres=#{@genre_id}", headers: authenticated_header}
 
       it 'returns a filtered list' do
-        expect(json.size).to eq(1)
+        expect(json['albums'].size).to eq(1)
+        expect(json['total_albums']).to eq(1)
+        expect(json['total_artists']).to eq(@total_artists)
       end
 
       it 'returns the correct album' do
-        genre_ids = json[0]['genres'].map {|genre| genre['id']}
+        genre_ids = json['albums'][0]['genres'].map {|genre| genre['id']}
         expect(genre_ids.include?(@genre_id)).to be true
       end
 
@@ -53,17 +59,20 @@ describe "GET /albums gets all albums", :type => :request do
         @albums = FactoryBot.create_list(:album, 10)
         @genre_1 = @albums[0].genres[0].id
         @genre_2 = @albums[1].genres[0].id
+        @total_artists = @albums[0].artists.size + @albums[1].artists.size
       end
 
       before {get "/albums?genres=#{@genre_1},#{@genre_2}", headers: authenticated_header}
 
       it 'returns a filtered list' do
-        expect(json.size).to eq(2)
+        expect(json['albums'].size).to eq(2)
+        expect(json['total_albums']).to eq(2)
+        expect(json['total_artists']).to eq(@total_artists)
       end
 
       it 'returns the correct albums' do
-        genre_ids_1 = json[0]['genres'].map {|genre| genre['id']}
-        genre_ids_2 = json[1]['genres'].map {|genre| genre['id']}
+        genre_ids_1 = json['albums'][0]['genres'].map {|genre| genre['id']}
+        genre_ids_2 = json['albums'][1]['genres'].map {|genre| genre['id']}
         genre_ids = genre_ids_1.concat(genre_ids_2)
         expect(genre_ids.include?(@genre_1)).to be true
         expect(genre_ids.include?(@genre_2)).to be true
@@ -87,11 +96,11 @@ describe "GET /albums gets all albums", :type => :request do
       before {get "/albums?styles=#{@style_id}", headers: authenticated_header}
 
       it 'returns a filtered list' do
-        expect(json.size).to eq(1)
+        expect(json['albums'].size).to eq(1)
       end
 
       it 'returns the correct album' do
-        style_ids = json[0]['styles'].map {|style| style['id']}
+        style_ids = json['albums'][0]['styles'].map {|style| style['id']}
         expect(style_ids.include?(@style_id)).to be true
       end
 

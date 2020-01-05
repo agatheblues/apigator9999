@@ -11,7 +11,8 @@ describe "GET /styles gets all styles", :type => :request do
     before {get '/styles', headers: authenticated_header}
 
     it 'returns all styles' do
-      expect(json.size).to eq(styles.length)
+      expect(json['styles'].size).to eq(styles.length)
+      expect(json['total_styles']).to eq(styles.length)
     end
 
     it 'returns status code 200' do

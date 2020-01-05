@@ -1,8 +1,20 @@
 {
   "id": "file:/styles.json#",
   "description": "A collection of styles",
-  "type": "array",
-  "items": {
-    "$ref": "file:/style.json#"
+  "type": "object",
+  "required": [
+    "styles",
+    "total_styles"
+  ],
+  "properties": {
+    "artists": {
+      "type": "array",
+      "items": {
+        "$ref": "file:/style.json#"
+      }
+    },
+    "total_styles": {
+      "type": "integer"
+    }
   }
 }

@@ -1,8 +1,20 @@
 {
   "id": "file:/genres.json#",
   "description": "A collection of genres",
-  "type": "array",
-  "items": {
-    "$ref": "file:/genre.json#"
+  "type": "object",
+  "required": [
+    "genres",
+    "total_genres"
+  ],
+  "properties": {
+    "artists": {
+      "type": "array",
+      "items": {
+        "$ref": "file:/genre.json#"
+      }
+    },
+    "total_genres": {
+      "type": "integer"
+    }
   }
 }

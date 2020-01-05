@@ -11,7 +11,9 @@ describe "GET /artists gets all artist", :type => :request do
     before {get '/artists', headers: authenticated_header}
 
     it 'returns all artists' do
-      expect(json.size).to eq(artists.length)
+      expect(json['artists'].size).to eq(artists.length)
+      expect(json['total_artists']).to eq(artists.length)
+      expect(json['total_albums']).to eq(10)
     end
 
     it 'returns status code 200' do

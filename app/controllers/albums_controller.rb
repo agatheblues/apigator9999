@@ -6,6 +6,8 @@ class AlbumsController < ApplicationController
 
   def index
     @albums = filter(Album.all)
+    @total_albums = @albums.count
+    @total_artists = @albums.map { |album| album.artists }.flatten.uniq { |artist| artist.id }.size
   end
 
   def show; end

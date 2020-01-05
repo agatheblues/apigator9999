@@ -1,8 +1,24 @@
 {
   "id": "file:/artists.json#",
   "description": "A collection of artists",
-  "type": "array",
-  "items": {
-    "$ref": "file:/artist_short.json#"
+  "type": "object",
+  "required": [
+    "artists",
+    "total_artists",
+    "total_albums"
+  ],
+  "properties": {
+    "artists": {
+      "type": "array",
+      "items": {
+        "$ref": "file:/artist_short.json#"
+      }
+    },
+    "total_artists": {
+      "type": "integer"
+    },
+    "total_albums": {
+      "type": "integer"
+    }
   }
 }
