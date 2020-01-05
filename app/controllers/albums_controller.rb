@@ -5,7 +5,7 @@ class AlbumsController < ApplicationController
   before_action :set_album, only: [:show, :update, :destroy]
 
   def index
-    @albums = filter(Album.all)
+    @albums = filter(Album.all).order('added_at DESC')
     @total_albums = @albums.count
     @total_artists = @albums.map { |album| album.artists }.flatten.uniq { |artist| artist.id }.size
   end
