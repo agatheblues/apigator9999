@@ -5,9 +5,9 @@ class Album < ApplicationRecord
   has_and_belongs_to_many :styles
 
   before_destroy do
-    artists.each { |artist| artist.destroy if artist.albums.length == 1 }
-    genres.each { |genre| genre.destroy if genre.albums.length == 1 }
-    styles.each { |style| style.destroy if style.albums.length == 1 }
+    artists.each { |artist| handle_association(artist) }
+    genres.each { |genre| handle_association(genre) }
+    styles.each { |style| handle_association(style) }
   end
 
   validates :added_at, presence: true
@@ -18,5 +18,15 @@ class Album < ApplicationRecord
 
   def has_at_least_one_id
     errors.add(:spotify_id, "or Discogs needs a value") unless spotify_id.present? || discogs_id.present?
+  end
+
+  private
+
+  def handle_association(association)
+    if association.albums.length == 1
+      association.destroy
+    else
+      association.update({ total_albums: association.total_albums - 1 })
+    end
   end
 end
