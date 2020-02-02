@@ -1,11 +1,10 @@
 class AlbumsController < ApplicationController
-  include FilterAlbums
   include CreateAlbumsAssociations
   
   before_action :set_album, only: [:show, :update, :destroy]
 
   def index
-    @albums = filter(Album.all).order('added_at DESC')
+    @albums = FilterAlbums.call(Album.all, filter_params).order('added_at DESC')
     @total_albums = @albums.count
     @total_artists = @albums.map { |album| album.artists }.flatten.uniq { |artist| artist.id }.size
   end
@@ -73,5 +72,9 @@ class AlbumsController < ApplicationController
 
   def style_params
     params.permit(:styles => [:name])
+  end
+
+  def filter_params
+    params.permit(:genres, :styles).to_h
   end
 end
