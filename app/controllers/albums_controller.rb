@@ -1,6 +1,4 @@
 class AlbumsController < ApplicationController
-  include CreateAlbumsAssociations
-  
   before_action :set_album, only: [:show, :update, :destroy]
 
   def index
@@ -12,25 +10,12 @@ class AlbumsController < ApplicationController
   def show; end
 
   def create
-    if !params.has_key?(:artists)
-      render json: {status: "error", code: 4000, message: "artists should not be blank"}, status: :bad_request
-      return
-    end
-
-    begin
-      ActiveRecord::Base.transaction do
-        @album = Album.new(album_params)
-        @album.save!
-        
-        handle_artists(artist_params['artists'], album_params['total_tracks'].to_i, false)
-        handle_genres(genre_params['genres'], false) if params.has_key?(:genres)
-        handle_styles(style_params['styles'], false) if params.has_key?(:styles)
-
-        render :show, status: :created
-      end
-    rescue ActiveRecord::RecordInvalid => exception
-      render json: {status: "error", code: 4000, message: exception}, status: :bad_request
-    end
+    raise ArtistsMissingError if artist_params.empty?
+    
+    @album = CreateAlbum.call(album_params, artists, genres, styles)
+    render :show, status: :created
+  rescue ActiveRecord::RecordInvalid, ArtistsMissingError => e
+    render json: {status: "error", code: 4000, message: e}, status: :bad_request
   end
 
   def update
@@ -66,15 +51,35 @@ class AlbumsController < ApplicationController
     params.permit(:artists => [:name, :img_url, :spotify_id, :discogs_id, :total_tracks, :total_albums])
   end
 
+  def artists
+    artist_params['artists']
+  end
+
   def genre_params
-    params.permit(:genres => [:name])
+    params.permit(:genres => [:name])  
+  end
+
+  def genres
+    return [] if !genre_params.has_key?(:genres)
+    genre_params['genres']
   end
 
   def style_params
     params.permit(:styles => [:name])
   end
 
+  def styles
+    return [] if !style_params.has_key?(:styles)
+    style_params['styles']
+  end
+
   def filter_params
     params.permit(:genres, :styles).to_h
+  end
+
+  class ArtistsMissingError < StandardError
+    def message
+      "artists should not be blank"
+    end
   end
 end
