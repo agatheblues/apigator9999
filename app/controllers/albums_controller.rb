@@ -10,12 +10,10 @@ class AlbumsController < ApplicationController
   def show; end
 
   def create
-    raise ArtistsMissingError if artist_params.empty?
-    
     @album = CreateAlbum.call(album_params, artists, genres, styles)
     render :show, status: :created
-  rescue ActiveRecord::RecordInvalid, ArtistsMissingError => e
-    render json: {status: "error", code: 4000, message: e}, status: :bad_request
+  rescue ActiveRecord::RecordInvalid, CreateOrUpdateArtists::ArtistsMissingError => e
+    render json: {status: "error", code: 4000, message: e.message}, status: :bad_request
   end
 
   def update
@@ -75,11 +73,5 @@ class AlbumsController < ApplicationController
 
   def filter_params
     params.permit(:genres, :styles).to_h
-  end
-
-  class ArtistsMissingError < StandardError
-    def message
-      "artists should not be blank"
-    end
   end
 end

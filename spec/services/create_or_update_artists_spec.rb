@@ -23,6 +23,14 @@ RSpec.describe CreateOrUpdateArtists do
     end
   end
 
+  context 'when no artists are provided' do
+    let(:artists) { [] }
+
+    it 'raises ArtistsMissingError' do
+      expect { call }.to raise_error(CreateOrUpdateArtists::ArtistsMissingError)
+    end
+  end
+
   context 'when artist already exists' do
     context 'and is a spotify artist' do
       let(:artist) { FactoryBot.create(:artist, spotify_id: 'lumps', total_albums: 2, total_tracks: 5)}

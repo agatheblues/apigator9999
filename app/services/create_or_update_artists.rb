@@ -4,6 +4,8 @@ class CreateOrUpdateArtists
   end
 
   def call
+    raise ArtistsMissingError if @artists.empty?
+
     ActiveRecord::Base.transaction do
       @artists.map do |artist|
         existing_artist = Artist.find_by(artist_ids(artist))
@@ -57,6 +59,12 @@ class CreateOrUpdateArtists
       {spotify_id: artist['spotify_id']}
     else
       {spotify_id: artist['spotify_id'], discogs_id: artist['discogs_id']}
+    end
+  end
+  
+  class ArtistsMissingError < StandardError
+    def message
+      "artists should not be blank"
     end
   end
 end
