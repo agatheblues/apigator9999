@@ -25,12 +25,12 @@ RSpec.describe CreateAlbum do
     let(:album_params) {
       {
         'name' => 'Pickles',
-        'added_at' => Time.now.to_s,
+        'added_at' => Time.now,
         'release_date' => '2016-01-01',
         'total_tracks' => 12,
         'img_url' => "https://placekitten.com/200/300",
-        'img_width' => '200',
-        'img_height' => '300',
+        'img_width' => 200,
+        'img_height' => 300,
         'spotify_id' => 'spotify_pickle',
         'discogs_id' => 'discogs_pickle'
       }
@@ -65,12 +65,12 @@ RSpec.describe CreateAlbum do
     let(:album_params) {
       {
         'name' => 'Pickles',
-        'added_at' => Time.now.to_s,
+        'added_at' => Time.now,
         'release_date' => '2016-01-01',
         'total_tracks' => 12,
         'img_url' => "https://placekitten.com/200/300",
-        'img_width' => '200',
-        'img_height' => '300',
+        'img_width' => 200,
+        'img_height' => 300,
         'spotify_id' => 'spotify_pickle',
         'discogs_id' => 'discogs_pickle'
       }

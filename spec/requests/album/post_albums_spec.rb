@@ -49,6 +49,7 @@ describe "POST /albums", :type => :request do
     
     context "with invalid attributes" do
       let(:params) { {foo: 'bar'} }
+      
       it "returns status code 400" do
         expect(CreateAlbum).to receive(:new).and_return(create_album)
         expect(create_album).to receive(:call).and_raise(ActiveRecord::RecordInvalid)
@@ -60,6 +61,7 @@ describe "POST /albums", :type => :request do
 
     context "with no artists" do
       let(:params) { {foo: 'bar'} }
+
       it "returns status code 400" do
         expect(CreateAlbum).to receive(:new).and_return(create_album)
         expect(create_album).to receive(:call).and_raise(CreateOrUpdateArtists::ArtistsMissingError)
