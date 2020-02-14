@@ -17,17 +17,8 @@ class AlbumsController < ApplicationController
   end
 
   def update
-    begin
-      ActiveRecord::Base.transaction do
-        @album.update(album_params)
-
-        handle_artists(artist_params['artists'], album_params['total_tracks'].to_i, true) if params.has_key?(:artists)
-        handle_genres(genre_params['genres'], true) if params.has_key?(:genres)
-        handle_styles(style_params['styles'], true) if params.has_key?(:styles)
-      
-        render :show, status: :ok
-      end
-    end
+    @album = UpdateAlbum.call(@album, album_params, artists, genres, styles)
+    render :show, status: :ok
   end
   
   def destroy
@@ -50,6 +41,7 @@ class AlbumsController < ApplicationController
   end
 
   def artists
+    return [] if !artist_params.has_key?(:artists)
     artist_params['artists']
   end
 

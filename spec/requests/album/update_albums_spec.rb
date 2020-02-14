@@ -2,82 +2,57 @@ require 'rails_helper'
 
 describe "PATCH /albums/:id updates the album", :type => :request do
   context 'when authenticated' do
+    subject(:call) { patch "/albums/#{album.id}", params: params, headers: authenticated_header }
+
+    let(:genre) { {'name' => 'dogdubs'} }
+    let(:style) { {'name' => 'dubsdog'} }
+    let(:artist) { 
+      {
+        'name' => "Artist 1",
+        'img_url' => "https://placekitten.com/200/300",
+        'discogs_id' => "discogs_1"
+      }
+    }
+    let(:album_params) {
+      {
+        'name' => 'Pickles',
+        'added_at' => Time.now.to_s,
+        'release_date' => '2016-01-01',
+        'total_tracks' => "12",
+        'img_url' => "https://placekitten.com/200/300",
+        'img_width' => "200",
+        'img_height' => "300",
+        'spotify_id' => 'spotify_pickle',
+        'discogs_id' => 'discogs_pickle'
+      }
+    }
+    let(:update_album) { instance_double(UpdateAlbum) }
+    let(:album) { FactoryBot.create(:album) }
+
     context "with valid id" do
-      setup do
-        @album = FactoryBot.attributes_for(:album)
-        @artists = FactoryBot.attributes_for_list(:artist, 2)
-        @genres = FactoryBot.attributes_for_list(:genre, 2)
-        @styles = FactoryBot.attributes_for_list(:style, 2)
-        @album['artists'] = @artists
-        @album['genres'] = @genres
-        @album['styles'] = @styles
-        @update_params = FactoryBot.attributes_for(:album)
-        @update_params['artists'] = @artists.dup << FactoryBot.attributes_for(:artist)
-        @update_params['genres'] = @genres.dup << FactoryBot.attributes_for(:genre)
-        @update_params['styles'] = @styles.dup << FactoryBot.attributes_for(:style)
-      end
+      let(:params) { format_params(album_params, [artist], [genre], [style]) }
 
-      before :each do
-        post "/albums", params: @album, headers: authenticated_header
-        @id = json['id']
-      end
-
-      it 'returns the correct album' do
-        patch "/albums/#{@id}", params: @update_params, headers: authenticated_header
-        expect(json['id']).to eq(@id)
-      end
-
-      it 'returns status code 200' do
-        patch "/albums/#{@id}", params: @update_params, headers: authenticated_header
+      it 'returns 201 and correct album' do
+        expect(UpdateAlbum).to receive(:new).with(
+          album,
+          ActionController::Parameters.new(album_params).permit!, 
+          [ActionController::Parameters.new(artist).permit!],
+          [ActionController::Parameters.new(genre).permit!],
+          [ActionController::Parameters.new(style).permit!]
+        )
+        .and_return(update_album)
+        expect(update_album).to receive(:call).and_return(album)
+        call
         expect(response).to have_http_status(:ok)
-      end
-
-      it 'has the correct schema' do
-        patch "/albums/#{@id}", params: @update_params, headers: authenticated_header
         expect(response).to match_json_schema("album/album_extended")
-      end
-
-      it 'updated the album' do
-        patch "/albums/#{@id}", params: @update_params, headers: authenticated_header
-        json = JSON.parse(response.body)
-        expect(json['name']).to eq(@update_params[:name])
-        expect(json['added_at']).to eq(@update_params[:added_at])
-        expect(json['release_date']).to eq(@update_params[:release_date])
-        expect(json['total_tracks']).to eq(@update_params[:total_tracks])
-        expect(json['img_url']).to eq(@update_params[:img_url])
-        expect(json['img_width']).to eq(@update_params[:img_width])
-        expect(json['img_height']).to eq(@update_params[:img_height])
-        expect(json['spotify_id']).to eq(@update_params[:spotify_id])
-        expect(json['discogs_id']).to eq(@update_params[:discogs_id])
-      end
-
-      it 'updated the artists' do
-        expect{
-          patch "/albums/#{@id}", params: @update_params, headers: authenticated_header
-        }.to change(Artist, :count).by(1)
-      end
-
-      it 'updated the genres' do
-        expect{
-          patch "/albums/#{@id}", params: @update_params, headers: authenticated_header
-        }.to change(Genre, :count).by(1)
-      end
-
-      it 'updated the styles' do
-        expect{
-          patch "/albums/#{@id}", params: @update_params, headers: authenticated_header
-        }.to change(Style, :count).by(1)
       end
     end
 
     context "with invalid id" do
       before {patch "/albums/-1", headers: authenticated_header}
 
-      it 'returns status code 404' do
+      it 'returns status code 404 and error message' do
         expect(response).to have_http_status(:not_found)
-      end
-
-      it 'returns an error message' do
         expect(response).to match_json_schema("error/error")
       end
     end
@@ -85,11 +60,21 @@ describe "PATCH /albums/:id updates the album", :type => :request do
   
   context 'when unauthenticated' do
     let(:album) { FactoryBot.create(:album) }
-    before {patch "/albums/#{album['id']}", params: {}}
+    before {patch "/albums/#{album.id}", params: {}}
 
     it 'returns unauthorized' do
       expect(response).to have_http_status(:unauthorized)
       expect(response.body).to be_empty
     end
+  end
+
+  private
+
+  def format_params(album_params, artists, genres, styles) 
+    params = album_params.clone
+    params['artists'] = artists
+    params['genres'] = genres
+    params['styles'] = styles
+    params
   end
 end
