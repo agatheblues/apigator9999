@@ -43,16 +43,16 @@ FactoryBot.define do
       end
     end
 
-    after(:create) do |album|
-      album.artists = create_list(:artist, rand(1..3), albums: [album])
+    transient do
+      artists_count { rand(1..3) }
+      genres_count { rand(1..3) }
+      styles_count { rand(1..3) }
     end
 
-    after(:create) do |album|
-      album.genres = create_list(:genre, rand(1..3), albums: [album])
-    end
-
-    after(:create) do |album|
-      album.styles = create_list(:style, rand(1..3), albums: [album])
+    after(:create) do |album, evaluator|
+      create_list(:artist, evaluator.artists_count, albums: [album])
+      create_list(:genre, evaluator.genres_count, albums: [album])
+      create_list(:style, evaluator.styles_count, albums: [album])
     end
   end
 
