@@ -8,27 +8,25 @@ describe Album, :type => :model do
   end
 
   context "validations" do
-    setup do
-      @valid_attrs = FactoryBot.attributes_for(:album)
-      @no_name_attrs = FactoryBot.attributes_for(:album, name: nil)
-      @no_added_at_attrs = FactoryBot.attributes_for(:album, added_at: nil)
-      @no_id_attrs = FactoryBot.attributes_for(:album, spotify_id: nil, discogs_id: nil)
-    end
+    let(:valid_attrs) { FactoryBot.attributes_for(:album) }
+    let(:no_name_attrs) { FactoryBot.attributes_for(:album, name: nil) }
+    let(:no_added_at_attrs) { FactoryBot.attributes_for(:album, added_at: nil) }
+    let(:no_id_attrs) { FactoryBot.attributes_for(:album, spotify_id: nil, discogs_id: nil) }
 
     it "is valid with valid attributes" do
-      expect(Album.new(@valid_attrs)).to be_valid
+      expect(Album.new(valid_attrs)).to be_valid
     end
 
     it "is not valid without a name" do
-      expect(Album.new(@no_name_attrs)).to_not be_valid
+      expect(Album.new(no_name_attrs)).to_not be_valid
     end
 
     it "is not valid without added_at" do
-      expect(Album.new(@no_added_at_attrs)).to_not be_valid
+      expect(Album.new(no_added_at_attrs)).to_not be_valid
     end
 
     it "is not valid without at least a discogs or spotify id" do
-      expect(Album.new(@no_id_attrs)).to_not be_valid
+      expect(Album.new(no_id_attrs)).to_not be_valid
     end
   end
 
