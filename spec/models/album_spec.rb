@@ -31,4 +31,58 @@ describe Album, :type => :model do
       expect(Album.new(@no_id_attrs)).to_not be_valid
     end
   end
+
+  context "before_destroy" do
+    subject(:call) { album.destroy }
+    
+    context "with artists, genres and styles that do not have other albums" do
+
+      let(:album) { FactoryBot.create(:album) }
+
+      it 'deletes the album, artists, genres and styles' do
+        expect { call }.to change(Album, :count).by(-1)
+        .and change(Artist, :count).by(-album.artists.length)
+        .and change(Genre, :count).by(-album.genres.length)
+        .and change(Style, :count).by(-album.styles.length)
+      end
+    end
+
+    context "with artists that do have other albums" do
+      let(:album_with_same_artists) { FactoryBot.create(:album) }
+      let(:album) { FactoryBot.create(:album, artists_count: 2) }
+
+      before { album.artists << album_with_same_artists.artists }
+     
+      it 'deletes the album, and artists without other album' do
+        expect { call }.to change(Album, :count).by(-1)
+          .and change(Artist, :count).by(-2)
+      end
+
+      it 'does not delete artists with other albums' do
+        call
+        album_with_same_artists.artists.each do |artist|
+          expect(Artist.exists?(artist.id)).to be true
+        end
+      end
+    end
+
+    context "with genres that do have other albums" do
+      let(:album_with_same_genres) { FactoryBot.create(:album) }
+      let(:album) { FactoryBot.create(:album, genres_count: 2) }
+
+      before { album.genres << album_with_same_genres.genres }
+
+      it 'deletes the album, and genres without other album' do
+        expect { call }.to change(Album, :count).by(-1)
+          .and change(Genre, :count).by(-2)
+      end
+
+      it 'deletes genre without other album' do
+        call
+        album_with_same_genres.genres.each do |genre|
+          expect(Genre.exists?(genre.id)).to be true
+        end
+      end
+    end
+  end
 end
