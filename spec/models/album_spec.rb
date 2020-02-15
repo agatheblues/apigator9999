@@ -36,7 +36,6 @@ describe Album, :type => :model do
     subject(:call) { album.destroy }
     
     context "with artists, genres and styles that do not have other albums" do
-
       let(:album) { FactoryBot.create(:album) }
 
       it 'deletes the album, artists, genres and styles' do
@@ -81,6 +80,25 @@ describe Album, :type => :model do
         call
         album_with_same_genres.genres.each do |genre|
           expect(Genre.exists?(genre.id)).to be true
+        end
+      end
+    end
+
+    context "with styles that do have other albums" do
+      let(:album_with_same_styles) { FactoryBot.create(:album) }
+      let(:album) { FactoryBot.create(:album, styles_count: 2) }
+
+      before { album.styles << album_with_same_styles.styles }
+
+      it 'deletes the album, and styles without other album' do
+        expect { call }.to change(Album, :count).by(-1)
+          .and change(Style, :count).by(-2)
+      end
+
+      it 'deletes style without other album' do
+        call
+        album_with_same_styles.styles.each do |style|
+          expect(Style.exists?(style.id)).to be true
         end
       end
     end
