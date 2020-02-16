@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UpdateAlbum
   def self.call(*args)
     new(*args).call
@@ -6,9 +8,9 @@ class UpdateAlbum
   def call
     ActiveRecord::Base.transaction do
       @album.update(@album_params)
-      @album.artists = CreateOrUpdateArtists.call(@artists, @album_params['total_tracks'].to_i) if @artists.length != 0
-      @album.genres = CreateOrUpdateGenres.call(@genres) if @genres.length != 0
-      @album.styles = CreateOrUpdateStyles.call(@styles) if @styles.length != 0
+      @album.artists = CreateOrUpdateArtists.call(@artists, @album_params['total_tracks'].to_i) unless @artists.empty?
+      @album.genres = CreateOrUpdateGenres.call(@genres) unless @genres.empty?
+      @album.styles = CreateOrUpdateStyles.call(@styles) unless @styles.empty?
       @album
     end
   end

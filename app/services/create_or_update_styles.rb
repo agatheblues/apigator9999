@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateOrUpdateStyles
   def self.call(*args)
     new(*args).call
@@ -6,7 +8,7 @@ class CreateOrUpdateStyles
   def call
     ActiveRecord::Base.transaction do
       @styles.map do |style_params|
-        existing_style = Style.find_by({name: style_params['name']})
+        existing_style = Style.find_by(name: style_params['name'])
         if existing_style.nil?
           create_style(style_params)
         else
@@ -26,14 +28,14 @@ class CreateOrUpdateStyles
     current_albums + 1
   end
 
-  def create_style(attrs) 
-    attrs = attrs.merge({ 'total_albums' => get_total_albums(0) })
-    return Style.create!(attrs)
+  def create_style(attrs)
+    attrs = attrs.merge('total_albums' => get_total_albums(0))
+    Style.create!(attrs)
   end
 
-  def update_style(existing_style, attrs) 
-    attrs = attrs.merge({ 'total_albums' => get_total_albums(existing_style['total_albums']) })
+  def update_style(existing_style, attrs)
+    attrs = attrs.merge('total_albums' => get_total_albums(existing_style['total_albums']))
     existing_style.update(attrs)
-    return existing_style
+    existing_style
   end
 end
