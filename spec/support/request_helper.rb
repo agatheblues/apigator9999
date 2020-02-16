@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Requests
   module JsonHelpers
     def json
@@ -12,7 +14,7 @@ module Requests
     end
 
     def current_user
-      @user ||= FactoryBot.create(:user)
+      @current_user ||= FactoryBot.create(:user)
     end
   end
 end

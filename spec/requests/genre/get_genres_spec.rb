@@ -1,14 +1,16 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
-describe "GET /genres gets all genres", :type => :request do
+describe 'GET /genres gets all genres', type: :request do
   context 'when authenticated' do
-    let!(:genres) { 
+    let!(:genres) do
       list = FactoryBot.create_list(:album, 10)
-      genres = list.map { |album| album.genres}
+      genres = list.map(&:genres)
       genres.flatten
-    }
+    end
 
-    before {get '/genres', headers: authenticated_header}
+    before { get '/genres', headers: authenticated_header }
 
     it 'returns all genres' do
       expect(json['genres'].size).to eq(genres.length)
@@ -20,12 +22,12 @@ describe "GET /genres gets all genres", :type => :request do
     end
 
     it 'has the correct schema' do
-      expect(response).to match_json_schema("genre/genres")
+      expect(response).to match_json_schema('genre/genres')
     end
   end
 
   context 'when unauthenticated' do
-    before {get '/genres'}
+    before { get '/genres' }
 
     it 'returns unauthorized' do
       expect(response).to have_http_status(:unauthorized)

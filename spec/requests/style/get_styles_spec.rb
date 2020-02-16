@@ -1,14 +1,16 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
-describe "GET /styles gets all styles", :type => :request do
+describe 'GET /styles gets all styles', type: :request do
   context 'when authenticated' do
-    let!(:styles) { 
+    let!(:styles) do
       list = FactoryBot.create_list(:album, 10)
-      styles = list.map { |album| album.styles}
+      styles = list.map(&:styles)
       styles.flatten
-    }
-  
-    before {get '/styles', headers: authenticated_header}
+    end
+
+    before { get '/styles', headers: authenticated_header }
 
     it 'returns all styles' do
       expect(json['styles'].size).to eq(styles.length)
@@ -20,12 +22,12 @@ describe "GET /styles gets all styles", :type => :request do
     end
 
     it 'has the correct schema' do
-      expect(response).to match_json_schema("style/styles")
+      expect(response).to match_json_schema('style/styles')
     end
   end
 
   context 'when unauthenticated' do
-    before {get '/styles'}
+    before { get '/styles' }
 
     it 'returns unauthorized' do
       expect(response).to have_http_status(:unauthorized)

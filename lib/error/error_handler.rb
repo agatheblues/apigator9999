@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 module Error
   module ErrorHandler
     def render_error_response(status, error, message)
-      render json: { 
+      render json: {
         status: status,
         error: error,
-        message: message, 
+        message: message
       }, status: status
     end
 

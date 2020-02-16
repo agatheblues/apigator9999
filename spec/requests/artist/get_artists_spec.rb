@@ -1,14 +1,16 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
-describe "GET /artists gets all artist", :type => :request do
+describe 'GET /artists gets all artist', type: :request do
   context 'when authenticated' do
-    let!(:artists) { 
+    let!(:artists) do
       list = FactoryBot.create_list(:album, 10)
-      artists = list.map { |album| album.artists}
+      artists = list.map(&:artists)
       artists.flatten
-    }
+    end
 
-    before {get '/artists', headers: authenticated_header}
+    before { get '/artists', headers: authenticated_header }
 
     it 'returns all artists' do
       expect(json['artists'].size).to eq(artists.length)
@@ -21,12 +23,12 @@ describe "GET /artists gets all artist", :type => :request do
     end
 
     it 'has the correct schema' do
-      expect(response).to match_json_schema("artist/artists")
+      expect(response).to match_json_schema('artist/artists')
     end
   end
 
   context 'when unauthenticated' do
-    before {get '/artists'}
+    before { get '/artists' }
 
     it 'returns unauthorized' do
       expect(response).to have_http_status(:unauthorized)
@@ -35,11 +37,11 @@ describe "GET /artists gets all artist", :type => :request do
   end
 end
 
-describe "GET /artists/:id gets the artist", :type => :request do
+describe 'GET /artists/:id gets the artist', type: :request do
   let!(:id) { FactoryBot.create(:album).artists[0].id }
-  
+
   context 'when authenticated' do
-    before {get "/artists/#{id}", headers: authenticated_header}
+    before { get "/artists/#{id}", headers: authenticated_header }
 
     it 'returns the correct artist' do
       expect(json['id']).to eq(id)
@@ -50,12 +52,12 @@ describe "GET /artists/:id gets the artist", :type => :request do
     end
 
     it 'has the correct schema' do
-      expect(response).to match_json_schema("artist/artist")
+      expect(response).to match_json_schema('artist/artist')
     end
   end
 
   context 'when unauthenticated' do
-    before {get "/artists/#{id}"}
+    before { get "/artists/#{id}" }
 
     it 'returns unauthorized' do
       expect(response).to have_http_status(:unauthorized)

@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 Rails.application.routes.draw do
-  root to: "home#index", format: 'json'
+  root to: 'home#index', format: 'json'
 
   # Users
   get '/users', to: 'users#index', format: 'json'

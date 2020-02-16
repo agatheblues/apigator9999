@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 json.id album.id
 json.name album.name
 json.added_at album.added_at

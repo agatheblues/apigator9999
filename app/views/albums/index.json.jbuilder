@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 json.albums do
   json.array! @albums, partial: 'albums/album_extended', as: :album
 end

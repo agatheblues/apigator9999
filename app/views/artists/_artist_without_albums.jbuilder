@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 json.id artist.id
 json.name artist.name
 json.spotify_id artist.spotify_id

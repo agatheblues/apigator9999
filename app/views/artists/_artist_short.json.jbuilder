@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 json.id artist.id
 json.name artist.name
 json.img_url artist.img_url

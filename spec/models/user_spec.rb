@@ -1,75 +1,77 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 describe User, type: :model do
-  context "validations" do
+  context 'validations' do
     let(:valid_attrs) { FactoryBot.attributes_for(:user) }
     let(:no_name_attrs) { FactoryBot.attributes_for(:user, username: nil) }
     let(:no_email_attrs) { FactoryBot.attributes_for(:user, email: nil) }
     let(:no_password_attrs) { FactoryBot.attributes_for(:user, password: nil) }
-    let(:short_password) { FactoryBot.attributes_for(:user, password: "passwrd") }
-    let(:long_password) { FactoryBot.attributes_for(:user, password: "password" * 9 + "a") }
+    let(:short_password) { FactoryBot.attributes_for(:user, password: 'passwrd') }
+    let(:long_password) { FactoryBot.attributes_for(:user, password: 'password' * 9 + 'a') }
 
-    it "is valid with valid attributes" do
+    it 'is valid with valid attributes' do
       expect(User.new(valid_attrs)).to be_valid
     end
 
-    it "is not valid without a username" do
+    it 'is not valid without a username' do
       expect(User.new(no_name_attrs)).to_not be_valid
     end
 
-    it "is not valid without an email" do
+    it 'is not valid without an email' do
       expect(User.new(no_email_attrs)).to_not be_valid
     end
 
-    it "is not valid without a password" do
+    it 'is not valid without a password' do
       expect(User.new(no_password_attrs)).to_not be_valid
     end
 
-    it "is not valid with a short password" do
+    it 'is not valid with a short password' do
       expect(User.new(short_password)).to_not be_valid
     end
 
-    it "is not valid with a long password" do
+    it 'is not valid with a long password' do
       expect(User.new(long_password)).to_not be_valid
     end
   end
 
-  context "uniqueness" do
+  context 'uniqueness' do
     let(:user) { FactoryBot.create(:user) }
     let(:same_username) { FactoryBot.attributes_for(:user, username: user.username) }
     let(:same_email) { FactoryBot.attributes_for(:user, email: user.email) }
 
-    it "is not valid if username already exists" do
+    it 'is not valid if username already exists' do
       expect(User.new(same_username)).to_not be_valid
     end
 
-    it "is not valid if email already exists" do
+    it 'is not valid if email already exists' do
       expect(User.new(same_email)).to_not be_valid
     end
   end
 
-  context "when user" do
+  context 'when user' do
     let(:user) { FactoryBot.create(:user) }
 
-    it "is_admin? return false" do
-      expect(user.is_admin?).to be false
+    it 'admin? return false' do
+      expect(user.admin?).to be false
     end
 
-    it "can_modify_user?" do
-      expect(user.can_modify_user?("not_you")).to be false
+    it 'can_modify_user?' do
+      expect(user.can_modify_user?('not_you')).to be false
       expect(user.can_modify_user?(user.id)).to be true
     end
   end
 
-  context "when admin" do
-    let(:admin) { FactoryBot.create(:user, role: "admin") }
+  context 'when admin' do
+    let(:admin) { FactoryBot.create(:user, role: 'admin') }
 
-    it "is_admin? return true" do
-      expect(admin.is_admin?).to be true
+    it 'admin? return true' do
+      expect(admin.admin?).to be true
     end
 
-    it "can_modify_user?" do
-      expect(admin.can_modify_user?("anyone")).to be true
+    it 'can_modify_user?' do
+      expect(admin.can_modify_user?('anyone')).to be true
     end
   end
 end

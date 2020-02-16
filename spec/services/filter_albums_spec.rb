@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe FilterAlbums do
@@ -20,7 +22,7 @@ RSpec.describe FilterAlbums do
   context 'when one genre filter is applied' do
     let(:album) { Album.first }
     let(:genre_id) { album.genres.first.id }
-    let(:params) { { "genres" => genre_id.to_s } }
+    let(:params) { { 'genres' => genre_id.to_s } }
 
     it 'returns a filtered list' do
       expect(call).to eq([album])
@@ -32,17 +34,17 @@ RSpec.describe FilterAlbums do
     let(:album_2) { Album.second }
     let(:genre_1) { album_1.genres.first.id }
     let(:genre_2) { album_2.genres.first.id }
-    let(:params) { { "genres" => "#{genre_1.to_s},#{genre_2.to_s}" } }
+    let(:params) { { 'genres' => "#{genre_1},#{genre_2}" } }
 
     it 'returns a filtered list' do
       expect(call).to eq([album_1, album_2])
     end
   end
-  
+
   context 'when one style filter is applied' do
     let(:album) { Album.first }
     let(:style_id) { album.styles.first.id }
-    let(:params) { { "styles" => style_id.to_s } }
+    let(:params) { { 'styles' => style_id.to_s } }
 
     it 'returns a filtered list' do
       expect(call).to eq([album])
@@ -54,7 +56,7 @@ RSpec.describe FilterAlbums do
     let(:album_2) { Album.second }
     let(:style_1) { album_1.styles.first.id }
     let(:style_2) { album_2.styles.first.id }
-    let(:params) { { "styles" => "#{style_1.to_s},#{style_2.to_s}" } }
+    let(:params) { { 'styles' => "#{style_1},#{style_2}" } }
 
     it 'returns a filtered list' do
       expect(call).to eq([album_1, album_2])
@@ -65,13 +67,13 @@ RSpec.describe FilterAlbums do
     let(:album_1) { Album.first }
     let(:genre) { album_1.genres.first }
     let(:style) { album_1.styles.first }
-    let(:attrs) { FactoryBot.attributes_for(:album).merge({ "genres" => [genre], "styles" => [style]})}
-    let(:album_2) { Album.create(attrs)}
-    let(:params) { { "styles" => style.id.to_s, "genres" => genre.id.to_s } }
+    let(:attrs) { FactoryBot.attributes_for(:album).merge('genres' => [genre], 'styles' => [style]) }
+    let(:album_2) { Album.create(attrs) }
+    let(:params) { { 'styles' => style.id.to_s, 'genres' => genre.id.to_s } }
 
-    before do 
-      Album.create(FactoryBot.attributes_for(:album).merge({ "genres" => [genre] }))
-      Album.create(FactoryBot.attributes_for(:album).merge({ "styles" => [style] }))
+    before do
+      Album.create(FactoryBot.attributes_for(:album).merge('genres' => [genre]))
+      Album.create(FactoryBot.attributes_for(:album).merge('styles' => [style]))
     end
 
     it 'only returns albums that match both params' do

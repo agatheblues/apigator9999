@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 json.artists do
   json.array! @artists, partial: 'artists/artist_short', as: :artist
 end

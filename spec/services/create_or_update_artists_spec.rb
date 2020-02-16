@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe CreateOrUpdateArtists do
@@ -6,15 +8,15 @@ RSpec.describe CreateOrUpdateArtists do
   let(:total_tracks) { 10 }
 
   context 'when artist is new' do
-    let(:artists) { 
+    let(:artists) do
       [
         {
-          'name' => "Artist 1",
-          'img_url' => "https://placekitten.com/200/300",
-          'discogs_id' => "discogs_1"
-        } 
+          'name' => 'Artist 1',
+          'img_url' => 'https://placekitten.com/200/300',
+          'discogs_id' => 'discogs_1'
+        }
       ]
-    }
+    end
 
     it 'creates a new artist' do
       expect { call }.to change(Artist, :count).by(1)
@@ -33,16 +35,23 @@ RSpec.describe CreateOrUpdateArtists do
 
   context 'when artist already exists' do
     context 'and is a spotify artist' do
-      let(:artist) { FactoryBot.create(:artist, spotify_id: 'lumps', total_albums: 2, total_tracks: 5)}
-      let(:artists) { 
+      let(:artist) do
+        FactoryBot.create(
+          :artist,
+          spotify_id: 'lumps',
+          total_albums: 2,
+          total_tracks: 5
+        )
+      end
+      let(:artists) do
         [
           {
-            'name' => "Artist 1",
-            'img_url' => "https://placekitten.com/200/300",
+            'name' => 'Artist 1',
+            'img_url' => 'https://placekitten.com/200/300',
             'spotify_id' => 'lumps'
-          } 
+          }
         ]
-      }
+      end
 
       before { artist }
 
@@ -55,19 +64,19 @@ RSpec.describe CreateOrUpdateArtists do
     end
 
     context 'and is a discogs artist' do
-      let(:artist) { FactoryBot.create(:artist, discogs_id: 'lumps', total_albums: 2, total_tracks: 5)}
-      let(:artists) { 
+      let(:artist) { FactoryBot.create(:artist, discogs_id: 'lumps', total_albums: 2, total_tracks: 5) }
+      let(:artists) do
         [
           {
-            'name' => "Artist 1",
-            'img_url' => "https://placekitten.com/200/300",
+            'name' => 'Artist 1',
+            'img_url' => 'https://placekitten.com/200/300',
             'discogs_id' => 'lumps'
-          } 
+          }
         ]
-      }
+      end
 
       before { artist }
-      
+
       it 'updates the artist' do
         expect { call }.not_to change(Artist, :count)
         artist.reload
@@ -77,20 +86,28 @@ RSpec.describe CreateOrUpdateArtists do
     end
 
     context 'and is both a discogs and spotify artist' do
-      let(:artist) { FactoryBot.create(:artist, discogs_id: 'lumps', spotify_id: 'chump', total_albums: 2, total_tracks: 5)}
-      let(:artists) { 
+      let(:artist) do
+        FactoryBot.create(
+          :artist,
+          discogs_id: 'lumps',
+          spotify_id: 'chump',
+          total_albums: 2,
+          total_tracks: 5
+        )
+      end
+      let(:artists) do
         [
           {
-            'name' => "Artist 1",
-            'img_url' => "https://placekitten.com/200/300",
+            'name' => 'Artist 1',
+            'img_url' => 'https://placekitten.com/200/300',
             'discogs_id' => 'lumps',
             'spotify_id' => 'chump'
-          } 
+          }
         ]
-      }
+      end
 
       before { artist }
-      
+
       it 'updates the artist' do
         expect { call }.not_to change(Artist, :count)
         artist.reload
