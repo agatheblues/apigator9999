@@ -4,7 +4,6 @@ Rails.application.routes.draw do
   root to: 'home#index', format: 'json'
 
   # Users
-  get '/users', to: 'users#index', format: 'json'
   get '/users/current', to: 'users#current', format: 'json'
   post '/users', to: 'users#create', format: 'json'
   patch '/users/:id', to: 'users#update', format: 'json'

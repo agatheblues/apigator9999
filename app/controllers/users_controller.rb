@@ -6,11 +6,6 @@ class UsersController < ApplicationController
   before_action :authorize, only: %i[update destroy]
   before_action :set_user, only: %i[show update destroy]
 
-  # Should work if the current_user is authenticated.
-  def index
-    render json: { status: 200, message: 'Logged-in' }
-  end
-
   # Call this method to check if the user is logged-in.
   # If the user is logged-in we will return the user's information.
   def current
