@@ -11,6 +11,19 @@ psql -U {pg user} -f postgresql_setup.txt
 ruby bin/rails db:migrate
 ```
 
+## Start the server
+
+```
+ruby bin/rails server
+```
+
+## Format
+
+```
+bundle exec rubocop
+bundle exec rubocop -a      # Autofix
+```
+
 ## Migrate data from Firebase
 
 In case you have been using the older version of Agator9999 with Firebase as a backend:
@@ -19,5 +32,7 @@ In case you have been using the older version of Agator9999 with Firebase as a b
 2. Copy it to `firebase_dump.rb`
 3. Run `rails runner <PATH_TO_FILE/migrate_data_from_firebase.rb>`
 
-Done!
 
+## API
+
+See `doc/api.md`.
