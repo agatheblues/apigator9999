@@ -51,15 +51,10 @@ class CreateOrUpdateArtists
   end
 
   def artist_ids(artist)
-    if (artist['spotify_id'].nil? && artist['discogs_id'].nil?)
-      nil
-    elsif (artist['spotify_id'].nil?)
-      {discogs_id: artist['discogs_id']}
-    elsif (artist['discogs_id'].nil?)
-      {spotify_id: artist['spotify_id']}
-    else
-      {spotify_id: artist['spotify_id'], discogs_id: artist['discogs_id']}
-    end
+    {
+      spotify_id: artist['spotify_id'], 
+      discogs_id: artist['discogs_id']
+    }.compact
   end
   
   class ArtistsMissingError < StandardError
