@@ -71,7 +71,7 @@ describe 'GET /albums gets all albums', type: :request do
     expect(filter_albums).to receive(:call).and_return(an_album_list)
     request
     expect(response).to have_http_status(:ok)
-    expect(response).to match_json_schema('album/albums')
+      .and match_json_schema('album/albums')
   end
   # rubocop:enable Metrics/AbcSize
 end
@@ -92,7 +92,7 @@ describe 'GET /albums/:id gets the album', type: :request do
 
       it 'returns :ok with correct schema' do
         expect(response).to have_http_status(:ok)
-        expect(response).to match_json_schema('album/album_extended')
+        .and match_json_schema('album/album_extended')
       end
     end
 
@@ -101,7 +101,7 @@ describe 'GET /albums/:id gets the album', type: :request do
 
       it 'returns 404 with correct schema' do
         expect(response).to have_http_status(:not_found)
-        expect(response).to match_json_schema('error/error')
+        .and match_json_schema('error/error')
       end
     end
   end

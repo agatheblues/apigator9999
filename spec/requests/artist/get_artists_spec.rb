@@ -18,12 +18,9 @@ describe 'GET /artists gets all artist', type: :request do
       expect(json['total_albums']).to eq(10)
     end
 
-    it 'returns status code 200' do
+    it 'returns status code 200 and has the correct schema' do
       expect(response).to have_http_status(:success)
-    end
-
-    it 'has the correct schema' do
-      expect(response).to match_json_schema('artist/artists')
+        .and match_json_schema('artist/artists')
     end
   end
 
@@ -41,18 +38,26 @@ describe 'GET /artists/:id gets the artist', type: :request do
   let!(:id) { FactoryBot.create(:album).artists[0].id }
 
   context 'when authenticated' do
-    before { get "/artists/#{id}", headers: authenticated_header }
+    context 'with a valid id' do
+      before { get "/artists/#{id}", headers: authenticated_header }
 
-    it 'returns the correct artist' do
-      expect(json['id']).to eq(id)
+      it 'returns the correct artist' do
+        expect(json['id']).to eq(id)
+      end
+
+      it 'returns status code 200 and has the correct schema' do
+        expect(response).to have_http_status(:success)
+          .and match_json_schema('artist/artist')
+      end
     end
 
-    it 'returns status code 200' do
-      expect(response).to have_http_status(:success)
-    end
+    context 'with invalid id' do
+      before { get '/artists/-1', headers: authenticated_header }
 
-    it 'has the correct schema' do
-      expect(response).to match_json_schema('artist/artist')
+      it 'returns 404 with correct schema' do
+        expect(response).to have_http_status(:not_found)
+          .and match_json_schema('error/error')
+      end
     end
   end
 
