@@ -11,6 +11,13 @@ class ArtistsController < ApplicationController
 
   def show; end
 
+  def merge
+    artist1 = Artist.find(params[:id1])
+    artist2 = Artist.find(params[:id2])
+    @artist = MergeArtists.call(artist1, artist2)
+    render :show, status: :ok
+  end
+
   private
 
   def set_artist

@@ -19,6 +19,7 @@ Rails.application.routes.draw do
   # Artists
   get 'artists', to: 'artists#index', format: 'json'
   get 'artists/:id', to: 'artists#show', format: 'json', as: :artist
+  post 'artists/:id1,:id2', to: 'artists#merge', format: 'json'
 
   # Albums
   resources :albums, format: 'json'

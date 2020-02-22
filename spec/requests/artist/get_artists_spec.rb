@@ -35,7 +35,7 @@ describe 'GET /artists gets all artist', type: :request do
 end
 
 describe 'GET /artists/:id gets the artist', type: :request do
-  let!(:id) { FactoryBot.create(:album).artists[0].id }
+  let(:id) { FactoryBot.create(:album).artists[0].id }
 
   context 'when authenticated' do
     context 'with a valid id' do
