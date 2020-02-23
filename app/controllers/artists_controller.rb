@@ -16,6 +16,8 @@ class ArtistsController < ApplicationController
     artist2 = Artist.find(params[:id2])
     @artist = MergeArtists.call(artist1, artist2)
     render :show, status: :ok
+  rescue ActiveRecord::RecordInvalid, MergeArtists::ArtistsMergeInvalidError => e
+    render json: { status: 'error', code: 4000, message: e.message }, status: :bad_request
   end
 
   private

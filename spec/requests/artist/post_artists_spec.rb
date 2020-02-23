@@ -29,9 +29,9 @@ describe 'POST /artists/:id1,:id2 merge both artists', type: :request do
 
       it 'calls the right service and returns :unprocessable_entity' do
         expect(MergeArtists).to receive(:new).with(artists[0], artists[1]).and_return(merge_artists)
-        expect(merge_artists).to receive(:call).and_raise(ActiveRecord::RecordInvalid)
+        expect(merge_artists).to receive(:call).and_raise(MergeArtists::ArtistsMergeInvalidError)
         call
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:bad_request)
           .and match_json_schema('error/error')
       end
     end
