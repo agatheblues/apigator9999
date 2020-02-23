@@ -11,7 +11,7 @@
     "albums": {
       "type": "array",
       "items": {
-        "$ref": "file:/album_short.json#"
+        "$ref": "file:/album_without_artists.json#"
       }
     },
     "total_albums": {
