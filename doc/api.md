@@ -213,6 +213,57 @@ Artists and albums are uniquely identified, throughout the app, by the combinati
 }
 ```
 
+### Merge two artists
+
+**Method URL:** `/artists/:id1,:id2`
+
+**HTTP Method:** `POST`
+
+**Bearer**: Token 
+
+**Response:**
+
+```
+{
+  "id": 2288,
+  "name": "Banana",
+  "spotify_id": null,
+  "discogs_id": "24awf8a7wf95a4sf9",
+  "img_url": "https://placekitten.com/200/300",
+  "total_albums": 4,
+  "total_tracks": 48,
+  "albums": [
+    {
+      "id": 3862,
+      "name": "Coconut",
+      "added_at": "2018-01-01T00:00:00.000Z",
+      "spotify_id": null,
+      "discogs_id": "aofihw57g8we7g9",
+      "release_date": "1979",
+      "total_tracks": 12,
+      "img_url": "https://placekitten.com/200/300",
+      "img_height": 300,
+      "img_width": 200,
+      "genres": [
+        {
+          "id": 73,
+          "name": "Rock",
+          "total_albums": 2
+        }
+      ],
+      "styles": [
+        {
+          "id": 470,
+          "name": "Rock'n'roll",
+          "total_albums": 2
+        }
+      ]
+    },
+    ...
+  ]
+}
+```
+
 ## Album
 
 ### Create an album
