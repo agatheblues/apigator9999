@@ -23,3 +23,5 @@
 /config/master.key
 
 firebase_dump.rb
+
+production.rb
