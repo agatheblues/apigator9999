@@ -48,7 +48,7 @@ group :development do
   gem 'rspec-rails', '~> 3.6'
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
-  gem 'wdm', '>= 0.1.0' if Gem.win_platform?
+  gem 'wdm', '>= 0.1.0', platforms: [:x64_mingw]
 
   # deployment
   gem 'capistrano'
