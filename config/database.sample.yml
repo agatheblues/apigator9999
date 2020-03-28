@@ -1,21 +1,26 @@
 default: &default
   adapter: postgresql
   encoding: unicode
-  host: localhost
-  username: apigator9999
-  password: coucou
-  # For details on connection pooling, see rails configuration guide
-  # http://guides.rubyonrails.org/configuring.html#database-pooling
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 
 development:
   <<: *default
   database: apigator9999_development
+  username: apigator9999
+  password: apigator9999
+  host: localhost
+  port: 5432
 
 test:
   <<: *default
   database: apigator9999_test
+  username: apigator9999
+  password: apigator9999
+  host: localhost
+  port: 5432
 
 production:
   <<: *default
   database: apigator9999_production
+  username: apigator9999
+  password: <%= ENV['APIGATOR9999_DB_PASSWORD'] %>

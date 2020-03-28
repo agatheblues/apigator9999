@@ -25,3 +25,5 @@
 firebase_dump.rb
 
 production.rb
+
+/config/database.yml
