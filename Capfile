@@ -33,7 +33,9 @@ install_plugin Capistrano::SCM::Git
 # require "capistrano/bundler"
 # require "capistrano/rails/assets"
 # require "capistrano/rails/migrations"
-require 'capistrano/rails'
+# require 'capistrano/rails'
+require 'capistrano/bundler'
+require 'capistrano/rails/migrations'
 require 'capistrano/passenger'
 require 'capistrano/rbenv'
 
