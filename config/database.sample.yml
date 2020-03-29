@@ -22,5 +22,5 @@ test:
 production:
   <<: *default
   database: apigator9999_production
-  username: apigator9999
+  username: <%= ENV['APIGATOR9999_DB_USER'] %>
   password: <%= ENV['APIGATOR9999_DB_PASSWORD'] %>
