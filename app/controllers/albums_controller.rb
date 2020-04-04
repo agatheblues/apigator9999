@@ -4,7 +4,8 @@ class AlbumsController < ApplicationController
   before_action :set_album, only: %i[show update destroy]
 
   def index
-    @albums = FilterAlbums.call(Album.joins(:genres, :styles).includes(:artists, :genres, :styles), filter_params).order('albums.added_at DESC')
+    relation = Album.joins(:genres, :styles).includes(:artists, :genres, :styles)
+    @albums = FilterAlbums.call(relation, filter_params).order('albums.added_at DESC')
     @total_albums = @albums.count
     @total_artists = @albums.map(&:artists).flatten.uniq(&:id).size
   end

@@ -29,4 +29,3 @@ json.albums @artist.albums do |album|
     json.total_albums style.total_albums
   end
 end
-

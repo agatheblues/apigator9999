@@ -7,6 +7,7 @@ class FilterAlbums
 
   def call
     return @relation if @filter_params.empty?
+
     @relation.where(@filter_params).distinct
   end
 
