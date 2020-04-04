@@ -7,7 +7,7 @@ RSpec.describe FilterAlbums do
   let(:service) { described_class.new(relation, params) }
 
   let(:albums) { FactoryBot.create_list(:album, 10) }
-  let(:relation) { Album.all }
+  let(:relation) { Album.all.includes(:artists, :genres, :styles) }
 
   before { albums }
 
@@ -37,7 +37,7 @@ RSpec.describe FilterAlbums do
     let(:params) { { 'genres' => "#{genre_1},#{genre_2}" } }
 
     it 'returns a filtered list' do
-      expect(call).to eq([album_1, album_2])
+      expect(call).to eq([album_2, album_1])
     end
   end
 
