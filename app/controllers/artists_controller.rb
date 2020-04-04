@@ -4,7 +4,7 @@ class ArtistsController < ApplicationController
   before_action :set_artist, only: [:show]
 
   def index
-    @artists = Artist.all.order('updated_at DESC')
+    @artists = Artist.all.includes(:albums).order('updated_at DESC')
     @total_artists = @artists.count
     @total_albums = @artists.map(&:albums).flatten.uniq(&:id).size
   end
