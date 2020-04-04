@@ -8,9 +8,6 @@ class FilterAlbums
   def call
     return @relation if @filter_params.empty?
 
-    @relation = @relation.joins(:genres) if @filter_params.key?('genres')
-    @relation = @relation.joins(:styles) if @filter_params.key?('styles')
-
     @relation.where(@filter_params).distinct
   end
 

@@ -66,7 +66,7 @@ describe 'GET /albums gets all albums', type: :request do
 
   # rubocop:disable Metrics/AbcSize
   def expect_ok_schema(params)
-    expect(FilterAlbums).to receive(:new).with(Album.all, params)
+    expect(FilterAlbums).to receive(:new).with(any_args, params)
                                          .and_return(filter_albums)
     expect(filter_albums).to receive(:call).and_return(an_album_list)
     request
