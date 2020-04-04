@@ -37,7 +37,7 @@ RSpec.describe FilterAlbums do
     let(:params) { { 'genres' => "#{genre_1},#{genre_2}" } }
 
     it 'returns a filtered list' do
-      expect(call).to eq([album_2, album_1])
+      expect(call.order('albums.added_at')).to eq([album_2, album_1].sort_by(&:added_at))
     end
   end
 
@@ -59,7 +59,7 @@ RSpec.describe FilterAlbums do
     let(:params) { { 'styles' => "#{style_1},#{style_2}" } }
 
     it 'returns a filtered list' do
-      expect(call).to eq([album_1, album_2])
+      expect(call.order('albums.added_at')).to eq([album_1, album_2].sort_by(&:added_at))
     end
   end
 
@@ -77,7 +77,7 @@ RSpec.describe FilterAlbums do
     end
 
     it 'only returns albums that match both params' do
-      expect(call).to eq([album_1, album_2])
+      expect(call.order('albums.added_at')).to eq([album_1, album_2].sort_by(&:added_at))
     end
   end
 end

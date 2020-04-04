@@ -6,6 +6,7 @@ json.artists @artists do |artist|
   json.img_url artist.img_url
   json.total_albums artist.total_albums
   json.total_tracks artist.total_tracks
+  json.updated_at artist.updated_at
 end
 json.total_albums @total_albums
 json.total_artists @total_artists
