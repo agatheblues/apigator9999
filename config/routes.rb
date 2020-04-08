@@ -23,4 +23,5 @@ Rails.application.routes.draw do
 
   # Albums
   resources :albums, format: 'json'
+  post '/batch/albums', to: 'batch#create', format: 'json'
 end
