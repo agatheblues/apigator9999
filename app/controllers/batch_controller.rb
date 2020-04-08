@@ -4,8 +4,7 @@ class BatchController < ApplicationController
   def create
     raise ActiveRecord::RecordInvalid unless albums_params.key?('albums')
 
-    ActiveRecord::Base.transaction { create_albums }
-
+    create_albums
     render json: { status: 'created' }, status: :created
   rescue ActiveRecord::RecordInvalid, CreateOrUpdateArtists::ArtistsMissingError => e
     render json: { status: 'error', code: 4000, message: e.message }, status: :bad_request
@@ -16,6 +15,9 @@ class BatchController < ApplicationController
   def create_albums
     albums_params['albums'].each do |album|
       CreateAlbum.call(album_params(album), pluck(album, 'artists'), pluck(album, 'genres'), pluck(album, 'styles'))
+    rescue ActiveRecord::RecordNotUnique
+      # This is very specific to this endpoint, here we want to batch
+      # create albums, so we want to ignore 409 and just go on.
     end
   end
 
