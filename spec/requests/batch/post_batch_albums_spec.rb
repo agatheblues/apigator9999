@@ -120,12 +120,11 @@ describe 'POST /batch/albums', type: :request do
     context 'with an already existing album' do
       let(:params) { { 'albums': [{ foo: 'bar' }] } }
 
-      it 'returns status code 409' do
+      it 'returns status code 201 and ignore conflicts' do
         expect(CreateAlbum).to receive(:new).and_return(create_album)
         expect(create_album).to receive(:call).and_raise(ActiveRecord::RecordNotUnique)
         call
-        expect(response).to have_http_status(:conflict)
-        expect(response).to match_json_schema('error/error')
+        expect(response).to have_http_status(:created)
       end
     end
   end
