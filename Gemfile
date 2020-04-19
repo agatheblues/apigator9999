@@ -57,7 +57,7 @@ group :development do
 end
 
 group :test do
-  gem 'database_cleaner'
+  gem 'database_cleaner-active_record'
   gem 'factory_bot_rails'
   gem 'json_matchers'
   gem 'shoulda-matchers'
