@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_05_193906) do
+ActiveRecord::Schema.define(version: 2020_04_19_162945) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,6 +27,8 @@ ActiveRecord::Schema.define(version: 2020_01_05_193906) do
     t.integer "img_width"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "youtube_url"
+    t.string "bandcamp_url"
     t.index ["discogs_id"], name: "index_albums_on_discogs_id", unique: true
     t.index ["spotify_id"], name: "index_albums_on_spotify_id", unique: true
   end
