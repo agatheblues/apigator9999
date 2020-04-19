@@ -32,7 +32,7 @@ FactoryBot.define do
     sequence(:name) { |n| "Album #{n}" }
     sequence(:added_at) { |n| "#{2019 - n}-01-01T00:16:48.000Z" }
     sequence(:release_date) { |n| "#{2016 - n}-01-01" }
-    sequence(:total_tracks) { 12 }
+    total_tracks { 12 }
     img_url { 'https://placekitten.com/200/300' }
     img_width { 200 }
     img_height { 300 }
@@ -52,9 +52,9 @@ FactoryBot.define do
     end
 
     after(:create) do |album, evaluator|
-      create_list(:artist, evaluator.artists_count, albums: [album])
-      create_list(:genre, evaluator.genres_count, albums: [album])
-      create_list(:style, evaluator.styles_count, albums: [album])
+      create_list(:artist, evaluator.artists_count, albums: [album], total_tracks: album.total_tracks, total_albums: 1)
+      create_list(:genre, evaluator.genres_count, albums: [album], total_albums: 1)
+      create_list(:style, evaluator.styles_count, albums: [album], total_albums: 1)
     end
   end
 
