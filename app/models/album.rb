@@ -7,9 +7,12 @@ class Album < ApplicationRecord
   has_and_belongs_to_many :styles
 
   before_destroy do
-    artists.each { |artist| handle_association(artist) }
-    genres.each { |genre| handle_association(genre) }
-    styles.each { |style| handle_association(style) }
+    artists.each do |artist|
+      handle_total_tracks(artist)
+      handle_total_albums(artist)
+    end
+    genres.each { |genre| handle_total_albums(genre) }
+    styles.each { |style| handle_total_albums(style) }
   end
 
   validates :added_at, presence: true
@@ -22,11 +25,15 @@ class Album < ApplicationRecord
 
   private
 
-  def handle_association(association)
+  def handle_total_albums(association)
     if association.albums.length == 1
       association.destroy
     else
       association.update(total_albums: association.total_albums - 1)
     end
+  end
+
+  def handle_total_tracks(association)
+    association.update(total_tracks: association.total_tracks - total_tracks)
   end
 end

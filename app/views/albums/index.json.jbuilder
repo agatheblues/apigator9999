@@ -12,6 +12,8 @@ json.albums do
     json.img_url album.img_url
     json.img_height album.img_height
     json.img_width album.img_width
+    json.youtube_url album.youtube_url
+    json.bandcamp_url album.bandcamp_url
     json.genres album.genres do |genre|
       json.id genre.id
       json.name genre.name

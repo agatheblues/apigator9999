@@ -30,3 +30,12 @@ Metrics/BlockLength:
   ExcludedMethods: ['describe', 'context', 'define', 'factory']
   Exclude:
     - 'spec/rails_helper.rb'
+
+Style/HashEachMethods:
+  Enabled: true
+
+Style/HashTransformKeys:
+  Enabled: true
+
+Style/HashTransformValues:
+  Enabled: true

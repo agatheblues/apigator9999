@@ -9,6 +9,7 @@ Apigator9999 is the back-end service of [agator9999](https://github.com/agathebl
 ```
 psql -U {pg user} -f postgresql_setup.txt
 ruby bin/rails db:migrate
+ruby bin/rails db:migrate RAILS_ENV=test
 ```
 
 ## Start the server

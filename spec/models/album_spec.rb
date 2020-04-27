@@ -48,8 +48,8 @@ describe Album, type: :model do
     end
 
     context 'with artists that do have other albums' do
-      let(:album_with_same_artists) { FactoryBot.create(:album) }
-      let(:album) { FactoryBot.create(:album, artists_count: 2) }
+      let(:album_with_same_artists) { FactoryBot.create(:album, artists_count: 2) }
+      let(:album) { FactoryBot.create(:album, artists_count: 2, total_tracks: 5) }
 
       before { album.artists << album_with_same_artists.artists }
 
@@ -63,6 +63,13 @@ describe Album, type: :model do
         album_with_same_artists.artists.each do |artist|
           expect(Artist.exists?(artist.id)).to be true
         end
+      end
+
+      it 'updates artists total tracks' do
+        expected_total_tracks = album_with_same_artists.artists.map { |a| a.total_tracks - 5 }
+        call
+        album_with_same_artists.reload
+        expect(album_with_same_artists.artists.map(&:total_tracks)).to eq(expected_total_tracks)
       end
     end
 
