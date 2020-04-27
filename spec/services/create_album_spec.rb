@@ -34,7 +34,9 @@ RSpec.describe CreateAlbum do
         'img_width' => 200,
         'img_height' => 300,
         'spotify_id' => 'spotify_pickle',
-        'discogs_id' => 'discogs_pickle'
+        'discogs_id' => 'discogs_pickle',
+        'bandcamp_url' => 'http://bandcamp.com',
+        'youtube_url' => 'http://youtube.com'
       }
     end
 
@@ -52,6 +54,7 @@ RSpec.describe CreateAlbum do
       expect(create_or_update_artists).to receive(:call).and_return([artist])
 
       expect { call }.to change(Album, :count).by(1)
+      expect(Album.last).to have_attributes(album_params.except('added_at'))
     end
   end
 

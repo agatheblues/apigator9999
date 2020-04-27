@@ -36,7 +36,7 @@ class AlbumsController < ApplicationController
 
   def album_params
     params.permit(:name, :release_date, :added_at, :total_tracks, :img_url, :img_width,
-                  :img_height, :spotify_id, :discogs_id)
+                  :img_height, :spotify_id, :discogs_id, :bandcamp_url, :youtube_url)
   end
 
   def artist_params
