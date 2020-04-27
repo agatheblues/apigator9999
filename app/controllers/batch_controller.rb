@@ -15,7 +15,9 @@ class BatchController < ApplicationController
   def create_albums
     albums_params['albums'].each do |album|
       CreateAlbum.call(album_params(album), pluck(album, 'artists'), pluck(album, 'genres'), pluck(album, 'styles'))
+    # rubocop:disable Lint/SuppressedException
     rescue ActiveRecord::RecordNotUnique
+      # rubocop:enable Lint/SuppressedException
       # This is very specific to this endpoint, here we want to batch
       # create albums, so we want to ignore 409 and just go on.
     end
