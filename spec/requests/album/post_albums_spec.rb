@@ -25,7 +25,9 @@ describe 'POST /albums', type: :request do
         'img_width' => '200',
         'img_height' => '300',
         'spotify_id' => 'spotify_pickle',
-        'discogs_id' => 'discogs_pickle'
+        'discogs_id' => 'discogs_pickle',
+        'bandcamp_url' => 'http://bandcamp.com',
+        'youtube_url' => 'http://youtube.com'
       }
     end
     let(:create_album) { instance_double(CreateAlbum) }
