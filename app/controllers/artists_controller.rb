@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ArtistsController < ApplicationController
-  before_action :set_artist, only: [:show]
+  before_action :set_artist, only: %i[show update]
 
   def index
     @artists = Artist.all.includes(:albums).order('updated_at DESC')
@@ -20,7 +20,16 @@ class ArtistsController < ApplicationController
     render json: { status: 'error', code: 4000, message: e.message }, status: :bad_request
   end
 
+  def update
+    @artist.update(artist_params)
+    render :show, status: :ok
+  end
+
   private
+
+  def artist_params
+    params.permit(:spotify_id, :discogs_id)
+  end
 
   def set_artist
     @artist = Artist.find(params[:id])

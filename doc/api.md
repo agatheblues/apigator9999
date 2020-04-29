@@ -264,6 +264,23 @@ Artists and albums are uniquely identified, throughout the app, by the combinati
 }
 ```
 
+### Update an artist
+
+**Method URL:** `/artists/:id`
+
+**HTTP Method:** `PATCH`
+
+**Bearer**: Token 
+
+**JSON Payload**: 
+
+```
+{
+  "spotify_id": "orange",
+  "discogs_id": "banana"
+}
+```
+
 ## Album
 
 ### Create an album
