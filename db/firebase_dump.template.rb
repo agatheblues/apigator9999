@@ -12,7 +12,8 @@ $albums = {
     "release_date": '2015-11-27',
     "sources": {
       "spotify": 'spotify_id'
-    }
+    },
+    "url": "https://example.com"
   }
 }
 
