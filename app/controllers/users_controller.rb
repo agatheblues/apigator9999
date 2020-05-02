@@ -16,8 +16,10 @@ class UsersController < ApplicationController
   def show; end
 
   def create
-    user = User.new(user_params)
-    render json: { status: 201, message: 'User was created.' }, status: :created if user.save
+    User.create!(user_params)
+    render json: { status: 201, message: 'User was created.' }, status: :created
+  rescue ActiveRecord::RecordInvalid => e
+    render json: { status: 'error', code: 4000, message: e }, status: :bad_request
   end
 
   def update
