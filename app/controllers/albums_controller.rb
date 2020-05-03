@@ -2,6 +2,7 @@
 
 class AlbumsController < ApplicationController
   before_action :set_album, only: %i[show update destroy]
+  before_action :authorize_as_admin, only: %i[create update destroy]
 
   def index
     relation = Album.joins(:genres, :styles).includes(:artists, :genres, :styles)

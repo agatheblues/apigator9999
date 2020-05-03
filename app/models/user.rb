@@ -16,10 +16,6 @@ class User < ApplicationRecord
   validates :email, presence: true, uniqueness: true
   validates :username, presence: true, uniqueness: true
 
-  def can_modify_user?(user_id)
-    role == 'admin' || id.to_s == user_id.to_s
-  end
-
   def admin?
     role == 'admin'
   end

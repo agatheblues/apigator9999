@@ -10,15 +10,7 @@ describe 'POST /users creates new user', type: :request do
 
     it 'creates a new user' do
       expect { call }.to change(User, :count).by(1)
-    end
-
-    it 'returns status code 201' do
-      call
       expect(response).to have_http_status(:created)
-    end
-
-    it 'has the correct body' do
-      call
       expect(json['message']).to eq('User was created.')
     end
   end
@@ -28,26 +20,18 @@ describe 'POST /users creates new user', type: :request do
 
     it 'creates a new user' do
       expect { call }.to change(User, :count).by(1)
-    end
-
-    it 'returns status code 201' do
-      call
       expect(response).to have_http_status(:created)
-    end
-
-    it 'has the correct body' do
-      call
       expect(json['message']).to eq('User was created.')
     end
 
     it 'has not created an admin role' do
       call
-      user = User.first
+      user = User.last
       expect(user['role']).to eq('user')
     end
   end
 
-  context 'when email already exists' do
+  context 'when email or username already exists' do
     let(:user) { FactoryBot.create(:user) }
     let(:user_params) { user.attributes }
 

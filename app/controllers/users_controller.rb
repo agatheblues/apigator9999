@@ -3,8 +3,8 @@
 class UsersController < ApplicationController
   # Use Knock to make sure the current_user is authenticated before completing request.
   skip_before_action :authenticate_user, only: [:create]
-  before_action :authorize, only: %i[update destroy]
   before_action :set_user, only: %i[show update destroy]
+  before_action :authorize_as_admin, only: %i[update destroy]
 
   # Call this method to check if the user is logged-in.
   # If the user is logged-in we will return the user's information.
@@ -41,9 +41,5 @@ class UsersController < ApplicationController
 
   def set_user
     @user = User.find(params[:id])
-  end
-
-  def authorize
-    head :unauthorized unless current_user&.can_modify_user?(params[:id])
   end
 end
