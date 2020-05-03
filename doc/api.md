@@ -55,6 +55,32 @@ Artists and albums are uniquely identified, throughout the app, by the combinati
 }
 ```
 
+
+### Get all users
+
+**Method URL:** `/users`
+
+**HTTP Method:** `GET`
+
+**Bearer**: Token 
+
+**Response:**
+
+```
+{
+  "users": [
+    {
+      "id": 9,
+      "email": "coucou@example.net",
+      "username": "pineapple",
+      "role": "user",
+      "confirmed_at": "2020-05-03T15:56:23.850Z"
+    },
+    ...
+  ]
+}
+```
+
 ### Update user
 
 **Method URL:** `/users/:id`

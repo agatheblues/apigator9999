@@ -5,7 +5,11 @@ class UsersController < ApplicationController
   skip_before_action :authenticate_user, only: [:create]
   skip_before_action :verify_user_confirmed, only: [:create]
   before_action :set_user, only: %i[show update destroy]
-  before_action :authorize_as_admin, only: %i[update destroy]
+  before_action :authorize_as_admin, only: %i[index update destroy]
+
+  def index
+    @users = User.all.order('created_at DESC')
+  end
 
   # Call this method to check if the user is logged-in.
   # If the user is logged-in we will return the user's information.

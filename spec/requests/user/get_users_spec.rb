@@ -28,3 +28,32 @@ describe 'GET /users/current gets current user', type: :request do
     end
   end
 end
+
+describe 'GET /users gets all users', type: :request do
+  context 'when authenticated' do
+    before { get '/users', headers: admin_authenticated_header }
+
+    it 'returns status code 200' do
+      expect(response).to have_http_status(:success)
+      expect(response).to match_json_schema('user/users')
+    end
+  end
+
+  context 'when authenticated but not admin' do
+    before { get '/users', headers: authenticated_header }
+
+    it 'returns unauthorized' do
+      expect(response).to have_http_status(:unauthorized)
+      expect(response.body).to be_empty
+    end
+  end
+
+  context 'when unauthenticated' do
+    before { get '/users' }
+
+    it 'returns unauthorized' do
+      expect(response).to have_http_status(:unauthorized)
+      expect(response.body).to be_empty
+    end
+  end
+end

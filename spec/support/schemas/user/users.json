@@ -1,0 +1,39 @@
+{
+  "id": "file:/users.json#",
+  "description": "A collection of users",
+  "type": "object",
+  "required": [
+    "users"
+  ],
+  "properties": {
+    "users": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "email",
+          "username",
+          "role",
+          "confirmed_at"
+        ],
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "email": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          },
+          "confirmed_at": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
