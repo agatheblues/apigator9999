@@ -3,6 +3,7 @@
 class UsersController < ApplicationController
   # Use Knock to make sure the current_user is authenticated before completing request.
   skip_before_action :authenticate_user, only: [:create]
+  skip_before_action :verify_user_confirmed, only: [:create]
   before_action :set_user, only: %i[show update destroy]
   before_action :authorize_as_admin, only: %i[update destroy]
 
