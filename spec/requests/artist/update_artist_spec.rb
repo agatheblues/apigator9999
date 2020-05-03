@@ -3,15 +3,18 @@
 require 'rails_helper'
 
 describe 'PATCH /artists/:id updates artist', type: :request do
-  context 'when authenticated' do
-    subject(:call) { patch "/artists/#{artist.id}", params: params, headers: authenticated_header }
-    let(:artist) { FactoryBot.create(:artist) }
+  subject(:call) { patch "/artists/#{id}", params: params, headers: headers }
+  let(:headers) { admin_authenticated_header }
+  let(:artist) { FactoryBot.create(:artist) }
+  let(:id) { artist.id }
 
+  before { call }
+
+  context 'when authenticated' do
     context 'with valid params' do
       let(:params) { { spotify_id: 'foo', discogs_id: 'bar' } }
 
       it 'updates the artist' do
-        call
         expect(artist.reload).to have_attributes(params)
         expect(response).to have_http_status(:ok)
           .and match_json_schema('artist/artist')
@@ -29,7 +32,6 @@ describe 'PATCH /artists/:id updates artist', type: :request do
       end
 
       it 'does not update the artist' do
-        call
         expect(artist.reload).not_to have_attributes(params)
         expect(response).to have_http_status(:ok)
           .and match_json_schema('artist/artist')
@@ -37,20 +39,29 @@ describe 'PATCH /artists/:id updates artist', type: :request do
     end
 
     context 'with artist that does not exist' do
-      subject(:call) { patch '/artists/-1', params: {}, headers: authenticated_header }
+      let(:id) { -1 }
+      let(:params) { {} }
 
       it 'returns 404 with correct schema' do
-        call
         expect(response).to have_http_status(:not_found)
           .and match_json_schema('error/error')
       end
     end
   end
 
-  context 'when unauthenticated' do
-    let(:artist) { FactoryBot.create(:artist) }
+  context 'when authenticated but not admin' do
+    let(:headers) { authenticated_header }
+    let(:params) { {} }
 
-    before { patch "/artists/#{artist.id}", params: {} }
+    it 'returns unauthorized' do
+      expect(response).to have_http_status(:unauthorized)
+      expect(response.body).to be_empty
+    end
+  end
+
+  context 'when unauthenticated' do
+    let(:headers) { nil }
+    let(:params) { {} }
 
     it 'returns unauthorized' do
       expect(response).to have_http_status(:unauthorized)

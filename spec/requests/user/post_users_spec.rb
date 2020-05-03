@@ -3,22 +3,14 @@
 require 'rails_helper'
 
 describe 'POST /users creates new user', type: :request do
+  subject(:call) { post '/users', params: user_params }
+
   context 'when user is not admin' do
     let!(:user_params) { FactoryBot.attributes_for(:user) }
 
     it 'creates a new user' do
-      expect do
-        post '/users', params: user_params
-      end.to change(User, :count).by(1)
-    end
-
-    it 'returns status code 201' do
-      post '/users', params: user_params
+      expect { call }.to change(User, :count).by(1)
       expect(response).to have_http_status(:created)
-    end
-
-    it 'has the correct body' do
-      post '/users', params: user_params
       expect(json['message']).to eq('User was created.')
     end
   end
@@ -27,25 +19,25 @@ describe 'POST /users creates new user', type: :request do
     let!(:user_params) { FactoryBot.attributes_for(:user, role: 'admin') }
 
     it 'creates a new user' do
-      expect do
-        post '/users', params: user_params
-      end.to change(User, :count).by(1)
-    end
-
-    it 'returns status code 201' do
-      post '/users', params: user_params
+      expect { call }.to change(User, :count).by(1)
       expect(response).to have_http_status(:created)
-    end
-
-    it 'has the correct body' do
-      post '/users', params: user_params
       expect(json['message']).to eq('User was created.')
     end
 
     it 'has not created an admin role' do
-      post '/users', params: user_params
-      user = User.first
+      call
+      user = User.last
       expect(user['role']).to eq('user')
+    end
+  end
+
+  context 'when email or username already exists' do
+    let(:user) { FactoryBot.create(:user) }
+    let(:user_params) { user.attributes }
+
+    it 'returns 400' do
+      call
+      expect(response).to have_http_status(:bad_request)
     end
   end
 end

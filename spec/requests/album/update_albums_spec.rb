@@ -3,9 +3,12 @@
 require 'rails_helper'
 
 describe 'PATCH /albums/:id updates the album', type: :request do
-  context 'when authenticated' do
-    subject(:call) { patch "/albums/#{album.id}", params: params, headers: authenticated_header }
+  subject(:call) { patch "/albums/#{id}", params: params, headers: headers }
+  let(:id) { album.id }
+  let(:headers) { admin_authenticated_header }
+  let(:album) { FactoryBot.create(:album) }
 
+  context 'when authenticated' do
     let(:genre) { { 'name' => 'dogdubs' } }
     let(:style) { { 'name' => 'dubsdog' } }
     let(:artist) do
@@ -29,7 +32,6 @@ describe 'PATCH /albums/:id updates the album', type: :request do
       }
     end
     let(:update_album) { instance_double(UpdateAlbum) }
-    let(:album) { FactoryBot.create(:album) }
 
     context 'with valid id' do
       let(:params) { format_params(album_params, [artist], [genre], [style]) }
@@ -51,20 +53,34 @@ describe 'PATCH /albums/:id updates the album', type: :request do
     end
 
     context 'with invalid id' do
-      before { patch '/albums/-1', headers: authenticated_header }
+      let(:id) { -1 }
+      let(:params) { {} }
 
       it 'returns status code 404 and error message' do
+        call
         expect(response).to have_http_status(:not_found)
         expect(response).to match_json_schema('error/error')
       end
     end
   end
 
-  context 'when unauthenticated' do
-    let(:album) { FactoryBot.create(:album) }
-    before { patch "/albums/#{album.id}", params: {} }
+  context 'when authenticated but admin' do
+    let(:params) { {} }
+    let(:headers) { authenticated_header }
 
     it 'returns unauthorized' do
+      call
+      expect(response).to have_http_status(:unauthorized)
+      expect(response.body).to be_empty
+    end
+  end
+
+  context 'when unauthenticated' do
+    let(:params) { {} }
+    let(:headers) { nil }
+
+    it 'returns unauthorized' do
+      call
       expect(response).to have_http_status(:unauthorized)
       expect(response.body).to be_empty
     end

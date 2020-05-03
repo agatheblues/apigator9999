@@ -3,9 +3,10 @@
 require 'rails_helper'
 
 describe 'POST /batch/albums', type: :request do
-  context 'when authenticated' do
-    subject(:call) { post '/batch/albums', params: params, headers: authenticated_header }
+  subject(:call) { post '/batch/albums', params: params, headers: headers }
+  let(:headers) { admin_authenticated_header }
 
+  context 'when authenticated' do
     let(:genre) { { 'name' => 'dogdubs' } }
     let(:style) { { 'name' => 'dubsdog' } }
     let(:artist1) do
@@ -129,11 +130,25 @@ describe 'POST /batch/albums', type: :request do
     end
   end
 
-  context 'when unauthenticated' do
+  context 'when authenticated but admin' do
     let(:album) { FactoryBot.attributes_for(:album) }
-    before { post '/batch/albums', params: { 'albums': [album] } }
+    let(:params) { { 'albums': [album] } }
+    let(:headers) { authenticated_header }
 
     it 'returns unauthorized' do
+      call
+      expect(response).to have_http_status(:unauthorized)
+      expect(response.body).to be_empty
+    end
+  end
+
+  context 'when unauthenticated' do
+    let(:album) { FactoryBot.attributes_for(:album) }
+    let(:params) { { 'albums': [album] } }
+    let(:headers) { nil }
+
+    it 'returns unauthorized' do
+      call
       expect(response).to have_http_status(:unauthorized)
       expect(response.body).to be_empty
     end

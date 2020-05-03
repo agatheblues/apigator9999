@@ -45,6 +45,9 @@ $albums.keys.each do |id|
   genres = $albums.dig(id, :genres).nil? ? [] : $albums.dig(id, :genres).map { |genre| create_or_set_genre(genre) }
   styles = $albums.dig(id, :styles).nil? ? [] : $albums.dig(id, :styles).map { |style| create_or_set_style(style) }
   total_tracks = get_total_tracks(id)
+  source = $albums.dig(id, :streaming_source)
+  bandcamp_url = source == 'bandcamp' ? $albums.dig(id, :url) : nil
+  youtube_url = source == 'youtube' ? $albums.dig(id, :url) : nil
 
   album = Album.create(
     added_at: $albums.dig(id, :added_at),
@@ -56,6 +59,8 @@ $albums.keys.each do |id|
     img_height: $albums.dig(id, :images, :height),
     img_width: $albums.dig(id, :images, :width),
     total_tracks: total_tracks,
+    bandcamp_url: bandcamp_url,
+    youtube_url: youtube_url,
     genres: genres,
     styles: styles
   )

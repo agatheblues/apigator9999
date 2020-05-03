@@ -13,16 +13,14 @@ class User < ApplicationRecord
   end
 
   # Make sure email and username are present and unique.
-  validates     :email, presence: true
-  validates     :username, presence: true
-  validates   :email, uniqueness: true
-  validates   :username, uniqueness: true
-
-  def can_modify_user?(user_id)
-    role == 'admin' || id.to_s == user_id.to_s
-  end
+  validates :email, presence: true, uniqueness: true
+  validates :username, presence: true, uniqueness: true
 
   def admin?
     role == 'admin'
+  end
+
+  def confirmed?
+    !confirmed_at.nil?
   end
 end

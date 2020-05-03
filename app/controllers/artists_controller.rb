@@ -2,6 +2,7 @@
 
 class ArtistsController < ApplicationController
   before_action :set_artist, only: %i[show update]
+  before_action :authorize_as_admin, only: %i[merge update]
 
   def index
     @artists = Artist.all.includes(:albums).order('updated_at DESC')

@@ -56,11 +56,6 @@ describe User, type: :model do
     it 'admin? return false' do
       expect(user.admin?).to be false
     end
-
-    it 'can_modify_user?' do
-      expect(user.can_modify_user?('not_you')).to be false
-      expect(user.can_modify_user?(user.id)).to be true
-    end
   end
 
   context 'when admin' do
@@ -68,10 +63,6 @@ describe User, type: :model do
 
     it 'admin? return true' do
       expect(admin.admin?).to be true
-    end
-
-    it 'can_modify_user?' do
-      expect(admin.can_modify_user?('anyone')).to be true
     end
   end
 end

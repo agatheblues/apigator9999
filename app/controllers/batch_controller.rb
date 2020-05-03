@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class BatchController < ApplicationController
+  before_action :authorize_as_admin, only: %i[create]
+
   def create
     raise ActiveRecord::RecordInvalid unless albums_params.key?('albums')
 

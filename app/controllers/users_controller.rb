@@ -3,8 +3,13 @@
 class UsersController < ApplicationController
   # Use Knock to make sure the current_user is authenticated before completing request.
   skip_before_action :authenticate_user, only: [:create]
-  before_action :authorize, only: %i[update destroy]
+  skip_before_action :verify_user_confirmed, only: [:create]
   before_action :set_user, only: %i[show update destroy]
+  before_action :authorize_as_admin, only: %i[index update destroy]
+
+  def index
+    @users = User.all.order('created_at DESC')
+  end
 
   # Call this method to check if the user is logged-in.
   # If the user is logged-in we will return the user's information.
@@ -16,8 +21,10 @@ class UsersController < ApplicationController
   def show; end
 
   def create
-    user = User.new(user_params)
-    render json: { status: 201, message: 'User was created.' }, status: :created if user.save
+    User.create!(user_params)
+    render json: { status: 201, message: 'User was created.' }, status: :created
+  rescue ActiveRecord::RecordInvalid => e
+    render json: { status: 'error', code: 4000, message: e }, status: :bad_request
   end
 
   def update
@@ -39,9 +46,5 @@ class UsersController < ApplicationController
 
   def set_user
     @user = User.find(params[:id])
-  end
-
-  def authorize
-    head :unauthorized unless current_user&.can_modify_user?(params[:id])
   end
 end

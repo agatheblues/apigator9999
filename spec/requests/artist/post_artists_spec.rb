@@ -3,15 +3,15 @@
 require 'rails_helper'
 
 describe 'POST /artists/:id1,:id2 merge both artists', type: :request do
+  subject(:call) { post "/artists/#{id1},#{id2}", headers: headers }
+  let(:headers) { admin_authenticated_header }
+  let(:artists) { FactoryBot.create_list(:artist, 3) }
+  let(:id1) { artists[0].id }
+  let(:id2) { artists[1].id }
+  let(:merge_artists) { instance_double(MergeArtists) }
+
   context 'when authenticated' do
-    subject(:call) { post "/artists/#{id1},#{id2}", headers: authenticated_header }
-
     context 'with artists that exist' do
-      let(:artists) { FactoryBot.create_list(:artist, 3) }
-      let(:id1) { artists[0].id }
-      let(:id2) { artists[1].id }
-      let(:merge_artists) { instance_double(MergeArtists) }
-
       it 'calls the right service and returns :ok' do
         expect(MergeArtists).to receive(:new).with(artists[0], artists[1]).and_return(merge_artists)
         expect(merge_artists).to receive(:call).and_return(artists[2])
@@ -22,11 +22,6 @@ describe 'POST /artists/:id1,:id2 merge both artists', type: :request do
     end
 
     context 'with artists that cannot be merged' do
-      let(:artists) { FactoryBot.create_list(:artist, 3) }
-      let(:id1) { artists[0].id }
-      let(:id2) { artists[1].id }
-      let(:merge_artists) { instance_double(MergeArtists) }
-
       it 'calls the right service and returns :unprocessable_entity' do
         expect(MergeArtists).to receive(:new).with(artists[0], artists[1]).and_return(merge_artists)
         expect(merge_artists).to receive(:call).and_raise(MergeArtists::ArtistsMergeInvalidError)
@@ -48,12 +43,21 @@ describe 'POST /artists/:id1,:id2 merge both artists', type: :request do
     end
   end
 
-  context 'when unauthenticated' do
-    let(:album) { FactoryBot.create(:album, artists_count: 2) }
-
-    before { post "/artists/#{album.artists[0].id},#{album.artists[1].id}" }
+  context 'when authenticated but admin' do
+    let(:headers) { authenticated_header }
 
     it 'returns unauthorized' do
+      call
+      expect(response).to have_http_status(:unauthorized)
+      expect(response.body).to be_empty
+    end
+  end
+
+  context 'when unauthenticated' do
+    let(:headers) { nil }
+
+    it 'returns unauthorized' do
+      call
       expect(response).to have_http_status(:unauthorized)
       expect(response.body).to be_empty
     end

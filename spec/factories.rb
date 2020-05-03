@@ -62,6 +62,7 @@ FactoryBot.define do
     sequence(:email) { |n| "user-#{n}@test.com" }
     sequence(:username) { |n| "username #{n}" }
     sequence(:password) { |n| "password#{n}" }
+    confirmed_at { Time.zone.now }
     role { 'user' }
   end
 end
