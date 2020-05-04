@@ -28,7 +28,7 @@ class UsersController < ApplicationController
   end
 
   def update
-    @user.update!(user_params)
+    @user.update!(update_user_params)
     render :show, status: :ok
   rescue ActiveRecord::RecordInvalid => e
     render json: { status: 'error', code: 4000, message: e }, status: :bad_request
@@ -42,6 +42,10 @@ class UsersController < ApplicationController
 
   def user_params
     params.permit(:username, :email, :password)
+  end
+
+  def update_user_params
+    params.permit(:confirmed_at)
   end
 
   def set_user
