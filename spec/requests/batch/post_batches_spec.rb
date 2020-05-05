@@ -2,8 +2,8 @@
 
 require 'rails_helper'
 
-describe 'POST /batch/albums', type: :request do
-  subject(:call) { post '/batch/albums', params: params, headers: headers }
+describe 'POST /batches', type: :request do
+  subject(:call) { post '/batches', params: params, headers: headers }
   let(:headers) { admin_authenticated_header }
 
   context 'when authenticated' do
@@ -49,7 +49,7 @@ describe 'POST /batch/albums', type: :request do
         'discogs_id' => 'discogs_pickle2'
       }
     end
-    let(:create_album) { instance_double(CreateAlbum) }
+    let(:create_album_worker) { instance_double(CreateAlbumsWorker) }
 
     context 'with valid attributes' do
       let(:album) { FactoryBot.create(:album) }
@@ -62,26 +62,16 @@ describe 'POST /batch/albums', type: :request do
         }
       end
 
-      it 'returns 201 and correct schema' do
-        expect(CreateAlbum).to receive(:new).with(
-          ActionController::Parameters.new(album_params1).permit!,
-          [ActionController::Parameters.new(artist1).permit!],
-          [ActionController::Parameters.new(genre).permit!],
-          [ActionController::Parameters.new(style).permit!]
-        )
-                                            .and_return(create_album)
-        expect(create_album).to receive(:call).and_return(album)
-        expect(CreateAlbum).to receive(:new).with(
-          ActionController::Parameters.new(album_params2).permit!,
-          [ActionController::Parameters.new(artist1).permit!,
-           ActionController::Parameters.new(artist2).permit!],
-          [],
-          []
-        )
-                                            .and_return(create_album)
-        expect(create_album).to receive(:call).and_return(album)
-        call
+      it 'returns 201 and creates a batch' do
+        expect(CreateAlbumsWorker).to receive(:perform_async).and_return('a_job_id')
+        expect { call }.to change(Batch, :count).by(1)
         expect(response).to have_http_status(:created)
+        expect(Batch.last).to have_attributes(
+          {
+            job_id: 'a_job_id',
+            data: params['albums']
+          }
+        )
       end
     end
 
@@ -91,41 +81,6 @@ describe 'POST /batch/albums', type: :request do
       it 'returns status code 400' do
         call
         expect(response).to have_http_status(:bad_request)
-      end
-    end
-
-    context 'with invalid albums attributes' do
-      let(:params) { { 'albums': [{ foo: 'bar' }] } }
-
-      it 'returns status code 400' do
-        expect(CreateAlbum).to receive(:new).and_return(create_album)
-        expect(create_album).to receive(:call).and_raise(ActiveRecord::RecordInvalid)
-        call
-        expect(response).to have_http_status(:bad_request)
-      end
-    end
-
-    context 'with no artists' do
-      let(:params) { { 'albums': [{ foo: 'bar' }] } }
-
-      it 'returns status code 400' do
-        expect(CreateAlbum).to receive(:new).and_return(create_album)
-        expect(create_album).to receive(:call).and_raise(CreateOrUpdateArtists::ArtistsMissingError)
-        call
-        expect(response).to have_http_status(:bad_request)
-        expect(response).to match_json_schema('error/error')
-        expect(json['message']).to eq('artists should not be blank')
-      end
-    end
-
-    context 'with an already existing album' do
-      let(:params) { { 'albums': [{ foo: 'bar' }] } }
-
-      it 'returns status code 201 and ignore conflicts' do
-        expect(CreateAlbum).to receive(:new).and_return(create_album)
-        expect(create_album).to receive(:call).and_raise(ActiveRecord::RecordNotUnique)
-        call
-        expect(response).to have_http_status(:created)
       end
     end
   end
