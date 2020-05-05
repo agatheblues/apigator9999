@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_03_150638) do
+ActiveRecord::Schema.define(version: 2020_05_05_150100) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -59,6 +59,14 @@ ActiveRecord::Schema.define(version: 2020_05_03_150638) do
     t.integer "total_albums", default: 0
     t.index ["discogs_id"], name: "index_artists_on_discogs_id", unique: true
     t.index ["spotify_id"], name: "index_artists_on_spotify_id", unique: true
+  end
+
+  create_table "batches", force: :cascade do |t|
+    t.jsonb "data", default: "{}", null: false
+    t.string "job_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["job_id"], name: "index_batches_on_job_id", unique: true
   end
 
   create_table "genres", force: :cascade do |t|
