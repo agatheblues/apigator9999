@@ -11,8 +11,8 @@ RSpec.describe CreateAlbumsWorker, type: :job do
       attributes_for_album
     ]
   end
-  let(:batch) { FactoryBot.create(:batch, data: albums)}
-  let(:create_album) { instance_double(CreateAlbum)}
+  let(:batch) { FactoryBot.create(:batch, data: albums) }
+  let(:create_album) { instance_double(CreateAlbum) }
 
   context 'with valid batch' do
     it 'creates the albums' do

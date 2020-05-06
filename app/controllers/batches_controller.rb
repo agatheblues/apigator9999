@@ -20,7 +20,7 @@ class BatchesController < ApplicationController
     status = Sidekiq::Status.status(@batch.job_id)
     render json: { id: @batch.id, status: status }, status: :ok
   end
-  
+
   private
 
   def albums_params
@@ -30,7 +30,7 @@ class BatchesController < ApplicationController
                            genres: [:name],
                            styles: [:name]]).to_h
   end
-  
+
   def set_batch
     @batch = Batch.find(params[:id])
   end

@@ -7,7 +7,7 @@ describe 'GET /batches/:id get the batch', type: :request do
   let(:batch) { FactoryBot.create(:batch) }
   let(:id) { batch.id }
   let(:headers) { admin_authenticated_header }
-  
+
   context 'when authenticated as admin' do
     context 'with valid id' do
       it 'returns the correct batch' do
@@ -15,7 +15,7 @@ describe 'GET /batches/:id get the batch', type: :request do
         call
         expect(response).to have_http_status(:ok)
         expect(response.body).to eq(
-          { 
+          {
             id: batch.id,
             status: 'completed'
           }.to_json
