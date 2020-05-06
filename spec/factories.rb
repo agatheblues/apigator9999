@@ -67,7 +67,7 @@ FactoryBot.define do
   end
 
   factory :batch do
-    data { [] }
+    data { [ create(:album) ] }
     job_id { nil }
   end
 end
