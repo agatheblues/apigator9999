@@ -65,4 +65,9 @@ FactoryBot.define do
     confirmed_at { Time.zone.now }
     role { 'user' }
   end
+
+  factory :batch do
+    data { [] }
+    job_id { nil }
+  end
 end
