@@ -57,7 +57,7 @@ describe 'POST /batches', type: :request do
         {
           'albums' => [
             format_params(album_params1, [artist1], [genre], [style]),
-            format_params(album_params2, [artist1, artist2], [], [])
+            format_params(album_params2, [artist1, artist2], [genre], [style])
           ]
         }
       end
