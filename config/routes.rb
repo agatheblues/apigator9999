@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'sidekiq/web'
+
 Rails.application.routes.draw do
   root to: 'home#index', format: 'json'
 
@@ -20,5 +22,10 @@ Rails.application.routes.draw do
 
   # Albums
   resources :albums, format: 'json'
-  post '/batch/albums', to: 'batch#create', format: 'json'
+
+  # Batches
+  get 'batches/:id', to: 'batches#show', format: 'json'
+  post 'batches', to: 'batches#create', format: 'json'
+
+  mount Sidekiq::Web => '/sidekiq' if Rails.env.development?
 end

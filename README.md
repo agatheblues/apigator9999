@@ -33,6 +33,9 @@ In case you have been using the older version of Agator9999 with Firebase as a b
 2. Copy it to `firebase_dump.rb`
 3. Run `rails runner <PATH_TO_FILE/migrate_data_from_firebase.rb>`
 
+## Sidekiq & Redis
+
+For local development, add the `REDIS_URL` in `config/local_env.yml`. On production, the app uses `rbenv-var`.
 
 ## API
 

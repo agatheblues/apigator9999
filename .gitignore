@@ -27,3 +27,4 @@ firebase_dump.rb
 production.rb
 
 /config/database.yml
+/config/local_env.yml
